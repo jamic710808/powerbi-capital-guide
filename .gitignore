@@ -1,0 +1,25 @@
+# 大檔與可由腳本重現的產物（重跑指令見 film/GAUNTLET.md 與 BRIEF.md）
+film/out_final.mp4
+film/film_web.mp4
+film/mix.wav
+film/mix_raw.wav
+film/music_only.wav
+film/vo44/
+powerbi-capital-explainer/film.mp4
+
+# 部署與暫存
+.vercel
+**/.vercel/
+film/nohup.out
+
+# QA 暫存畫格與接觸表（結論已寫入 GAUNTLET.md）
+film/qa1/
+film/qa2/
+film/qa3/
+film/qa1_sheet*.png
+film/qa2_sheet*.png
+film/qa3_joins.png
+film/qa_times.txt
+film/qa2_times.txt
+film/qa2_map.json
+qa_page/

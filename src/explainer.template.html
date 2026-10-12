@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Power BI 資金分析報告 · 圖解導覽</title>
+<meta name="description" content="零基礎看懂一份 Power BI 資金分析報告：7 張頁面回答 6 個資金管理問題。先看圖，再點、再放大。">
+<style>
+:root{--bg:#f1f6f7;--card:#fff;--ink:#0c2a3a;--mut:#587286;--teal:#13788a;--teal2:#1fa3b8;--mint:#2fb59a;--orange:#e9792f;--line:#d3e1e6;--r:18px;--sh:0 10px 30px rgba(12,42,58,.10)}
+:root[data-theme=dark]{--bg:#07161f;--card:#0f2634;--ink:#e3f2f5;--mut:#9ab9c4;--line:#1f4254;--sh:0 10px 30px rgba(0,0,0,.4)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:"Microsoft JhengHei","Noto Sans TC","PingFang TC",sans-serif;line-height:1.6}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:10px 20px;white-space:nowrap}
+nav b{margin-right:10px;color:var(--teal)}
+nav a{padding:6px 12px;border-radius:20px;text-decoration:none;font-size:14px;color:var(--mut)}
+nav a:hover,nav a.on{background:var(--teal);color:#fff}
+#theme{margin-left:auto;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px;font-size:13px}
+section{padding:70px 0 10px}
+h2{font-size:34px;letter-spacing:.02em;margin-bottom:6px}
+h2 small{display:inline-block;font-size:15px;font-weight:700;color:#fff;background:var(--orange);padding:2px 12px;border-radius:14px;margin-right:12px;vertical-align:middle}
+.lead{color:var(--mut);font-size:18px;margin-bottom:26px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--line)}
+.hero{padding:44px 0 20px;display:grid;grid-template-columns:1fr 1.15fr;gap:34px;align-items:center}
+.hero h1{font-size:clamp(34px,5vw,56px);line-height:1.15}
+.hero h1 span{color:var(--teal2)}
+.hero p{font-size:19px;color:var(--mut);margin:16px 0 22px}
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.flow .n{padding:10px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-weight:800;box-shadow:var(--sh)}
+.flow i{font-style:normal;color:var(--orange);font-size:22px}
+.shot{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:var(--sh)}
+.shot img{display:block;width:100%;height:auto}
+.zoomable{cursor:zoom-in}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.kpi{padding:16px 18px}
+.kpi b{display:block;font-size:30px;color:var(--teal);font-variant-numeric:tabular-nums}
+.kpi span{font-size:14px;color:var(--mut)}
+/* video */
+.vid{padding:10px}
+.vid video{display:block;width:100%;border-radius:12px;background:#000;aspect-ratio:16/9}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px;font-size:14px;font-weight:700}
+.chip:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.chip small{color:var(--orange);margin-right:4px;font-variant-numeric:tabular-nums}
+.chip:hover small{color:#fff}
+/* layers */
+.layers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.layer{padding:22px;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:var(--r);transition:.2s;position:relative}
+.layer:hover{transform:translateY(-3px)}
+.layer[aria-pressed=true]{border-color:var(--orange);box-shadow:var(--sh)}
+.layer .ic{font-size:44px}
+.layer h3{font-size:24px;margin:6px 0 2px}
+.layer p{color:var(--mut);font-size:15px}
+.layer .big{font-size:40px;font-weight:800;color:var(--teal2)}
+.layer:not(:last-child)::after{content:"➜";position:absolute;right:-20px;top:46%;color:var(--orange);font-size:24px;z-index:2}
+#layerInfo{margin-top:16px;padding:22px 26px;font-size:17px;min-height:96px}
+/* six questions */
+.qs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.q{padding:12px;text-align:left;border:2px solid var(--line);background:var(--card);border-radius:var(--r);transition:.2s}
+.q:hover{transform:translateY(-3px);border-color:var(--orange)}
+.q .th{border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.q .th img{display:block;width:100%}
+.q h3{font-size:22px;margin:10px 0 0;display:flex;gap:8px;align-items:center}
+.q h3 i{font-style:normal;width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:17px;flex:none}
+.q span{color:var(--mut);font-size:14px}
+/* journey */
+.journey{display:grid;grid-template-columns:260px 1fr;gap:20px}
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:var(--card);text-align:left}
+.step .no{width:34px;height:34px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-weight:800;flex:none}
+.step[aria-selected=true]{border-color:var(--orange)}
+.step[aria-selected=true] .no{background:var(--orange);color:#fff}
+.stage{padding:24px;min-height:360px}
+.stage h3{font-size:24px;margin-bottom:6px}
+.stage p{color:var(--mut);margin-bottom:14px}
+table.t{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+table.t th{background:var(--teal);color:#fff;padding:7px 10px;text-align:left;font-weight:700;white-space:nowrap}
+table.t td{padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td.n{text-align:right}
+.scroll{overflow-x:auto}
+code,pre{font-family:Consolas,"Cascadia Mono","Microsoft JhengHei",monospace}
+pre{background:#08202c;color:#cdeee9;padding:16px 18px;border-radius:12px;font-size:14px;overflow-x:auto;line-height:1.55}
+pre .k{color:#ffd27a}pre .c{color:#7fe0c6}pre .s{color:#ff9d6b}
+.btn{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:12px;font-weight:700;text-decoration:none}
+.btn.pri{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn:disabled{opacity:.45;cursor:default}
+/* star schema */
+.star{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
+.svgbox{padding:14px}
+.svgbox svg{width:100%;height:auto;display:block}
+.node{cursor:pointer}
+.node rect{transition:.15s}
+.node:hover rect,.node.on rect{stroke:var(--orange);stroke-width:4}
+.node text{pointer-events:none;font-weight:800;font-size:17px}
+.edge{stroke:var(--teal2);stroke-width:1.5;fill:none;opacity:.22;transition:.2s}
+.edge.off{stroke-dasharray:6 5}
+.edge.hi{opacity:.95;stroke:var(--orange);stroke-width:3}
+#nodeInfo{padding:22px}
+#nodeInfo h3{font-size:24px}
+.pill{display:inline-block;padding:3px 10px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:13px;margin:3px 4px 3px 0}
+.tag{font-size:13px;font-weight:800;padding:2px 10px;border-radius:10px;color:#fff}
+.tag.f{background:var(--orange)}.tag.d{background:var(--mint)}
+/* report tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{padding:9px 14px;border-radius:20px;border:2px solid var(--line);background:var(--card);font-weight:700;font-size:15px}
+.tab[aria-selected=true]{background:var(--teal);color:#fff;border-color:var(--teal)}
+.rep{display:grid;grid-template-columns:1.8fr 1fr;gap:18px}
+.hs{position:absolute;border:3px solid transparent;border-radius:8px;background:transparent;transition:.15s}
+.hs:hover,.hs.on{border-color:var(--orange);background:rgba(233,121,47,.14)}
+.hs::after{content:"";position:absolute;right:-8px;top:-8px;width:18px;height:18px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 0 rgba(233,121,47,.6);animation:pulse 2s infinite}
+.hs.on::after{animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 12px rgba(233,121,47,0)}100%{box-shadow:0 0 0 0 rgba(233,121,47,0)}}
+.side{padding:22px}
+.side h3{font-size:22px}
+.side .qq{font-size:20px;font-weight:800;color:var(--teal);margin:6px 0 12px}
+.hint{font-size:14px;color:var(--mut);margin-top:10px}
+#hsInfo{margin-top:14px;padding:14px 16px;border-radius:12px;background:var(--bg);border:1px dashed var(--orange);font-size:15px;min-height:70px}
+.hotbtn{margin-top:10px}
+/* flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.flip{perspective:900px;height:350px;border:0;background:none;text-align:left}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip[aria-pressed=true] .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;padding:20px;border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--sh);overflow:auto}
+.flip .f{background:var(--card)}
+.flip .b{background:#08202c;color:#cdeee9;transform:rotateY(180deg);font-size:13px}
+.flip h3{font-size:26px;color:var(--teal)}
+.flip .f p{color:var(--mut);margin-top:6px}
+.flip .f .tapme{position:absolute;right:16px;bottom:12px;font-size:13px;color:var(--orange);font-weight:800}
+/* chart guide */
+.guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gc{padding:12px;text-align:center}
+.gc .im{border-radius:10px;background-color:#eef5f7;background-repeat:no-repeat;margin-bottom:10px;border:1px solid var(--line)}
+.gc b{font-size:22px;color:var(--teal)}
+.gc p{font-size:14px;color:var(--mut)}
+/* measure bars */
+.mbars{padding:22px}
+.mrow{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;margin:7px 0;font-size:15px}
+.mbar{height:20px;border-radius:10px;background:var(--bg);overflow:hidden}
+.mbar i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,var(--mint),var(--teal2));width:0;transition:width 1s}
+.mrow.disp .mbar i{background:linear-gradient(90deg,#f6b47c,var(--orange))}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:8px 0;padding:4px 18px}
+summary{cursor:pointer;font-weight:800;padding:12px 0;font-size:18px}
+details p{color:var(--mut);padding:0 0 14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.box{padding:22px}
+.box h3{font-size:22px;margin-bottom:8px}
+.box.fact{border-top:6px solid var(--mint)}.box.warn{border-top:6px solid var(--orange)}
+.box li{margin:8px 0 8px 20px}
+.cmd{display:flex;gap:10px;align-items:stretch;margin:10px 0}
+.cmd pre{flex:1;margin:0}
+#lb{position:fixed;inset:0;background:rgba(3,12,18,.88);z-index:100;display:none;overflow:auto;cursor:zoom-out;padding:20px}
+#lb.on{display:block}
+#lb img{display:block;margin:0 auto;max-width:none;width:min(2400px,220vw);border-radius:8px;background:#fff}
+#lb .x{position:fixed;right:18px;top:12px;font-size:34px;color:#fff;background:none;border:0}
+footer{padding:50px 0 70px;color:var(--mut);font-size:14px}
+.journey>*,.star>*,.rep>*,.hero>*,.two>*,.qs>*,.layers>*,.flips>*,.guide>*,.kpis>*{min-width:0}
+.stage,#nodeInfo,.side{overflow-wrap:anywhere}
+@media(max-width:900px){.hero,.star,.rep,.journey{grid-template-columns:1fr}.layers,.flips,.two,.qs{grid-template-columns:1fr}.guide{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}.layer:not(:last-child)::after{display:none}.steps{flex-direction:row;overflow-x:auto}.step{flex:none}h2{font-size:27px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><b>資金 · Power BI</b>
+<a href="#top">全貌</a><a href="#film">影片</a><a href="#layers">三層樓</a><a href="#qs">六個問題</a><a href="#journey">資料旅程</a><a href="#star">星狀模型</a><a href="#pages">七個頁面</a><a href="#defs">口徑</a><a href="#charts">選圖</a><a href="#measures">度量值</a><a href="#notes">注意事項</a><a href="#run">自己打開</a>
+<button id="theme" aria-label="切換深淺色">🌓 深／淺</button></div></nav>
+
+<main class="wrap" id="top">
+<div class="hero">
+ <div>
+  <h1>把資金數字，<br>變成<span>看得懂的安排</span></h1>
+  <p>這是一份集團資金管理的 Power BI 分析報告。<b>你不需要先懂 Power BI，也不需要先懂資金管理</b>——先看圖，再點、再放大，就能知道它怎麼運作。</p>
+  <div class="flow"><span class="n">📄 18 個 CSV</span><i>→</i><span class="n">🧩 資料模型</span><i>→</i><span class="n">📊 7 個頁面</span></div>
+  <div class="kpis" style="grid-template-columns:repeat(2,1fr)">
+   <div class="kpi card"><b data-n="42961.7" data-d="1">0</b><span>萬元 · 可用資金</span></div>
+   <div class="kpi card"><b data-n="34527.8" data-d="1">0</b><span>萬元 · 可調配資金</span></div>
+   <div class="kpi card"><b data-n="35812.5" data-d="1">0</b><span>萬元 · 13 週最低可用</span></div>
+   <div class="kpi card"><b data-n="908.6" data-d="1">0</b><span>萬元 · 13 週區域性最大缺口</span></div>
+  </div>
+ </div>
+ <figure class="shot zoomable" data-key="p0"><img data-k="p0_s" alt="報告首頁：讓資金流向更有價值的地方、進入資金分析按鈕、四個 KPI（可用資金 42,961.7、可調配資金 34,527.8、13 週最低可用 35,812.5、13 週區域性最大缺口 908.6，單位萬元）"></figure>
+</div>
+<p class="hint">四個數字取自報告首頁（單位萬元，外幣以期末匯率折算人民幣），資料截止 2026-10-05。點圖可放大。資料為示範（模擬）資料。</p>
+
+<!-- FILM -->
+<section id="film">
+ <h2><small>▶</small>影片　6 分鐘看完整份報告</h2>
+ <p class="lead">旁白＋字幕。沒時間往下捲的話，先看這支。點下面的章節可以直接跳。</p>
+ <div class="card vid"><video id="vid" controls preload="metadata" playsinline poster="poster.jpg"><source src="film.mp4" type="video/mp4">你的瀏覽器不支援影片播放。</video></div>
+ <div class="chips" id="chips"></div>
+ <p class="hint">旁白：Gemini TTS（Kore）；配樂為程式合成的柔和鋼琴與音墊。旁白發音若有誤讀，以畫面字幕為準。</p>
+</section>
+
+<!-- LAYERS -->
+<section id="layers">
+ <h2><small>01</small>全貌：三層樓</h2>
+ <p class="lead">像蓋房子：地基是資料，中間是「規則」，最上面才是你看到的畫面。點每一層。</p>
+ <div class="layers" role="group" aria-label="三層架構">
+  <button class="layer" aria-pressed="true" data-i="0"><div class="ic">📄</div><h3>資料層</h3><div class="big">18</div><p>個 CSV：8 張「發生了什麼」＋10 張對照表</p></button>
+  <button class="layer" aria-pressed="false" data-i="1"><div class="ic">🧩</div><h3>模型層</h3><div class="big">151</div><p>個 DAX 度量值＋55 條關聯</p></button>
+  <button class="layer" aria-pressed="false" data-i="2"><div class="ic">📊</div><h3>報告層</h3><div class="big">7</div><p>個可看的頁面（首頁＋安全總覽＋5 專題）</p></button>
+ </div>
+ <div class="card" id="layerInfo"></div>
+</section>
+
+<!-- QUESTIONS -->
+<section id="qs">
+ <h2><small>02</small>資金管理的六個問題</h2>
+ <p class="lead">報告的每張內頁，只回答一個問題。點卡片，直接跳到那一頁。</p>
+ <div class="qs" id="qgrid"></div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey">
+ <h2><small>03</small>一筆資金數字的旅程</h2>
+ <p class="lead">從 CSV 裡的一行，到你看到的一張卡片。左邊切換步驟。</p>
+ <div class="journey">
+  <div class="steps" role="tablist" aria-label="資料旅程步驟" id="steps"></div>
+  <div class="card stage" id="stage" role="tabpanel"></div>
+ </div>
+</section>
+
+<!-- STAR -->
+<section id="star">
+ <h2><small>04</small>星狀模型：誰跟誰連在一起</h2>
+ <p class="lead">橘色＝「事實表」（每天發生的事）。綠色＝「維度表」（誰、什麼、何時）。<b>點任何一張表</b>，會亮起它連到的線。</p>
+ <div class="star">
+  <div class="card svgbox"><svg viewBox="0 0 900 720" id="starSvg" role="img" aria-label="星狀模型示意圖：8 張事實表在中間，10 張維度表在左右兩側"></svg></div>
+  <div class="card" id="nodeInfo"></div>
+ </div>
+ <p class="hint">連線依模型的實際關聯繪製：55 條皆為「多對一、單向篩選」，其中 50 條啟用、5 條停用（虛線，皆為備用的日期關聯）。事實表與維度表之間沒有再串到別的事實表，是標準的星狀模型。</p>
+</section>
+
+<!-- PAGES -->
+<section id="pages">
+ <h2><small>05</small>七個頁面，各回答一個問題</h2>
+ <p class="lead">切換頁籤；橘色圓點是「可以點的重點」。點圖可放大成全解析度。</p>
+ <div class="tabs" role="tablist" id="ptabs"></div>
+ <div class="rep">
+  <div><div class="shot" id="pshot"><img id="pimg" class="zoomable" alt=""></div>
+   <div class="hint">▲ 圖上的橘點可以點；整張圖點一下可放大。</div></div>
+  <div class="card side" id="pside"></div>
+ </div>
+</section>
+
+<!-- DEFS -->
+<section id="defs">
+ <h2><small>06</small>口徑：這個數字怎麼算的</h2>
+ <p class="lead">同一個詞，換間公司算法可能不同。這份報告把算法寫成<b>可檢查的公式</b>。點卡片翻面看 DAX。</p>
+ <div class="flips" id="flips"></div>
+</section>
+
+<!-- CHARTS -->
+<section id="charts">
+ <h2><small>07</small>圖表怎麼選</h2>
+ <p class="lead">每個問題配一種圖。下面是報告裡真正用到的樣子（截自報告）。</p>
+ <div class="guide" id="guide"></div>
+</section>
+
+<!-- MEASURES -->
+<section id="measures">
+ <h2><small>08</small>151 個度量值住在哪</h2>
+ <p class="lead">度量值按「顯示資料夾」的第一層整理。長條＝個數。橘色是「給畫面用」的輔助度量值。</p>
+ <div class="card mbars" id="mbars"></div>
+ <p class="hint">事實：統計自模型的度量值與 displayFolder（共 151 個，2026-10-12）。「展示輔助」49 個，其中「萬元顯示」資料夾就有 39 個（把金額換算成萬元給畫面用），另有 9 個 HTML 卡片文字度量值。<b>觀察（推測）</b>：這份報告把「顯示用」與「計算用」分開放，改單位或文字時不必動核心公式。報表本身共 120 個視覺物件，其中導覽按鈕 49 個、篩選器 18 個、HTML 內容視覺 9 個。</p>
+</section>
+
+<!-- GLOSSARY -->
+<section id="glossary">
+ <h2><small>09</small>小字典</h2>
+ <details><summary>什麼是「度量值（Measure）」？</summary><p>一條會隨你點的篩選器重新計算的公式。例如「可用資金」：你選某家公司，它就只算那家公司；再選某個幣種，就只算那家公司的那個幣種。</p></details>
+ <details><summary>什麼是 DAX？</summary><p>Power BI 寫公式的語言，像 Excel 函數的進階版。CALCULATE、SUMX、DIVIDE 是最常見的三個。</p></details>
+ <details><summary>事實表 vs 維度表？</summary><p>事實表記錄「發生了什麼」（一筆收付、一天的帳戶餘額、一筆融資事件），列數多；維度表是「對照資料」（公司、幣種、日期、資金池），列數少，拿來分組、篩選。</p></details>
+ <details><summary>餘額為什麼「不能跨日加總」？</summary><p>帳戶日餘額、金融日快照是「時點快照」：每天一列，記的是那一天結束時的狀態。把 30 天的餘額加起來沒有意義，要取「某一天」的值（所以可用資金的公式會固定在分析截止日）。</p></details>
+ <details><summary>備付底線與區域性缺口有什麼不同？</summary><p>備付底線＝日常運營至少要留著的錢。區域性缺口＝每個「法人 × 幣種」分別比較「預計可用資金」和「備付底線」，不足的部分才算缺口，且<b>不互相抵銷</b>：集團總量充裕，不代表每家法人、每個幣種都夠。</p></details>
+ <details><summary>什麼是資金池？為什麼「同池、同幣種」？</summary><p>資金池是集團內可以互相調配的一組帳戶。報告檢查調配時只看「同一個池、同一種幣種」還有多少匹配空間；頁面給的只是候選安排，不代表已審批或執行。</p></details>
+ <details><summary>敞口、遠期、對沖是什麼？</summary><p>敞口＝外幣資產減外幣負債，匯率一動就會受影響的部分。遠期是事先約定匯率的買賣。<b>做了遠期不等於風險下降</b>：淨買入遠期加在原本的多頭上，敞口反而會變大（本報表：19,616 → 19,824 萬元）。</p></details>
+ <details><summary>授信、理財，能不能當成現金？</summary><p>不能直接當。授信只是備用額度（可提款授信 7,707.2 萬元，未計入現金餘額）；理財能不能付款，要看可變現條件（報告顯示「理財可變現 0.0 萬元」）。</p></details>
+ <details><summary>降息 50bp 是什麼意思？</summary><p>bp（基點）＝0.01 個百分點，50bp＝0.5 個百分點。第 4 頁用「全部貸款降息 50bp 年化測算」估計利息可省多少（35.1 萬元，未扣費用）。</p></details>
+ <details><summary>.pbip 跟 .pbix 差在哪？</summary><p>.pbix 是單一壓縮檔；.pbip 把報告拆成純文字資料夾（.Report 放頁面與圖表、.SemanticModel 放模型與 DAX），適合版本控制與讓 AI 讀懂、修改。</p></details>
+</section>
+
+<!-- NOTES -->
+<section id="notes">
+ <h2><small>10</small>看報告前，先知道這些</h2>
+ <div class="two">
+  <div class="card box fact"><h3>✅ 已確認事實</h3><ul>
+   <li><b>線上版與本機模型是同一份數字。</b>報告畫面上 30 個 KPI（如可用資金 42,961.7494、13 週最大缺口 908.633、加權年利率 5.726%）逐項對過 DAX 查詢結果，全部吻合（2026-10-12）。</li>
+   <li><b>資料截止日 2026-10-05，報告幣種為人民幣。</b>金額單位萬元，外幣餘額以期末匯率折算；「距首次缺口 10 天」是從 2026-10-05 起算，不是從今天。</li>
+   <li><b>可調配資金＝可用資金 − 最低運營備付 − 調撥限制。</b>加總後恰好相符：42,961.7 − 1,209.8 − 7,224.1 ＝ 34,527.8（帳戶層級，DAX 查詢）。</li>
+   <li>缺口按「法人 × 幣種」分別計，<b>不跨主體抵銷</b>：總量充裕（13 週最低 35,812.5，是備付底線的 29.6 倍），仍有 1 家法人在 10-15 出現缺口，峰值 908.6 萬元。</li>
+   <li>帳戶日餘額、金融日快照是時點快照，<b>餘額不得跨日加總</b>（資料表描述寫明）。</li>
+   <li>授信是備用額度、未計入現金餘額；理財可變現目前為 0.0。</li>
+   <li>資料規模：6 家法人、30 個帳戶、4 種幣種、300 個往來方、120 份金融合同；帳戶日餘額 32,880 列＝30 帳戶 × 1,096 天（2023-10-06 至 2026-10-05）。</li>
+   <li>資料為示範（模擬）資料：首頁註明「名稱和數字均為模擬資料」，匯率表也有「是否模擬資料」欄。</li>
+  </ul></div>
+  <div class="card box warn"><h3>⚠️ 觀察／待確認</h3><ul>
+   <li><b>左側選單標題「集团资金分析报告」是簡體字。</b>7 頁都有；報表頁面定義裡找不到這串文字，<b>推測</b>是側欄背景圖的一部分。其餘畫面文字為繁體（也有「情景」這類偏簡體地區的用詞）。本頁圖片保持原貌，未修改。</li>
+   <li>模型本身的描述（database.tmdl）是簡體：「自营零售电商集团资金分析；模拟数据；8事实10维度，单向星型关系。」；專案內另有 <code>數據源_還原</code> 資料夾（簡體檔名的原始 CSV），模型實際讀的是 <code>數據源_繁體</code>。</li>
+   <li><b>首頁的「可調配資金 34,527.8」和第 5 頁的「參與資金池可調配 33,188」口徑不同</b>：後者只含參與資金池的帳戶；同理第 5 頁調撥限制 4,736，與全部帳戶加總的 7,224.1 也不同。我沒有逐項拆解兩者的差額。</li>
+   <li>5 條停用的備用日期關聯（到期事項的原／新到期日、渠道結算的預計／實際到帳日、資金流水的價值日期）。<b>推測</b>是用 USERELATIONSHIP 在特定度量值啟用，未逐一驗證。</li>
+   <li>13 週預測含「新增業務假設」（淨 +1,560.9 萬元），頁面註明為計畫與假設、尚未實際發生；「預計淨消耗 6,931.3 萬元」是含假設的結果。</li>
+   <li>資料夾參數在磁碟上的 .tmdl 寫的是 <code>D:\PowerBI資金分析報告\數據源_繁體</code>，和本機專案實際位置不同；要重新整理資料前請改成你自己的路徑。</li>
+  </ul></div>
+ </div>
+ <p class="hint">以上「觀察」是我比對線上報表畫面、模型查詢與本機檔案後的判斷，未向原作者確認。畫面擷取自線上 Power BI 報告（Publish to web，2026-10-12）。</p>
+</section>
+
+<!-- RUN -->
+<section id="run">
+ <h2><small>11</small>自己動手：先線上看，再 3 步打開它</h2>
+ <p style="font-size:18px;margin-bottom:10px">🌐 <b>線上路徑</b>（不用安裝任何東西）：Power BI 公開發佈版，直接在瀏覽器操作篩選器、切頁。</p>
+ <p style="margin-bottom:18px"><a class="btn pri" href="https://app.powerbi.com/view?r=eyJrIjoiMjQwMzA4YjItOTMyNi00NmY0LWEzOTctMmI1MDBiYTgzODgzIiwidCI6IjE2ZGVlZGU4LTc5ZTktNGUzMy05OWU2LTlkOGQzOTQyZDc5NiIsImMiOjEwfQ%3D%3D" target="_blank" rel="noopener">開啟線上報告 ↗</a></p>
+ <p style="font-size:18px;margin-bottom:6px">想拆開研究，再用下面 3 步開本機檔：</p>
+ <ol style="margin:0 0 14px 22px;font-size:18px;line-height:2">
+  <li>用 Power BI Desktop 開啟 <code>.pbip</code> 檔（需開啟「Power BI 專案」預覽功能）。</li>
+  <li>到「轉換資料 → 參數」把 <code>資料來源資料夾</code> 改成你的 <code>數據源_繁體</code> 路徑。</li>
+  <li>重新整理全部資料，切到各頁面試試篩選器。</li>
+ </ol>
+ <div class="cmd"><pre id="c1">D:\CODEX\POWER BI\PowerBI資金分析報告\PowerBI資金分析報告.pbip</pre><button class="btn" data-copy="c1">複製路徑</button></div>
+ <div class="cmd"><pre id="c2">D:\CODEX\POWER BI\PowerBI資金分析報告\數據源_繁體</pre><button class="btn" data-copy="c2">複製資料夾路徑</button></div>
+</section>
+
+<footer>畫面取自線上 Power BI 報告（Publish to web）；資料為示範（模擬）資料，不代表任何真實公司。介紹文章：〈從資金安全到匯率風險：用這個Power BI資金分析報告幫你看清楚〉。</footer>
+</main>
+
+<div id="lb" role="dialog" aria-label="圖片放大"><button class="x" aria-label="關閉">×</button><img alt=""></div>
+
+<script>
+const IMGS=/*IMGS*/{};
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+$$('img[data-k]').forEach(i=>i.src=IMGS[i.dataset.k]);
+/* theme */
+$('#theme').onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'':'dark';try{localStorage.setItem('th',r.dataset.theme||'')}catch(e){}};
+try{const t=localStorage.getItem('th');if(t)document.documentElement.dataset.theme=t}catch(e){}
+/* count up */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target,n=+el.dataset.n,d=+(el.dataset.d||0);io.unobserve(el);const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/1200),v=n*(1-Math.pow(1-p,3));el.textContent=v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});if(p<1)requestAnimationFrame(f)})(t0)}),{threshold:.4});
+$$('[data-n]').forEach(e=>{e.textContent=(+e.dataset.n).toLocaleString('en-US',{minimumFractionDigits:+(e.dataset.d||0),maximumFractionDigits:+(e.dataset.d||0)});io.observe(e)});
+/* lightbox */
+const lb=$('#lb');function openLb(src){$('img',lb).src=src;lb.classList.add('on');lb.scrollTop=0}
+document.addEventListener('click',e=>{const z=e.target.closest('.zoomable');if(z&&!e.target.closest('.hs')&&z.dataset.key){openLb(IMGS[z.dataset.key]);}});
+lb.onclick=()=>lb.classList.remove('on');document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.classList.remove('on')});
+/* copy */
+$$('[data-copy]').forEach(b=>b.onclick=async()=>{const t=$('#'+b.dataset.copy).textContent;try{await navigator.clipboard.writeText(t);b.textContent='已複製 ✓'}catch(e){b.textContent='請手動選取'}setTimeout(()=>b.textContent=b.dataset.copy==='c1'?'複製路徑':'複製資料夾路徑',1600)});
+/* nav highlight */
+const secs=$$('section');const nio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){$$('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-40% 0px -55% 0px'});secs.forEach(s=>nio.observe(s));
+
+/* film chapters（秒數由 build_explainer.py 依 timeline.json 各場景起點產生，不手填） */
+const CH=/*CH*/[];
+const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+$('#chips').innerHTML=CH.map(c=>`<button class="chip" data-t="${c[1]}"><small>${fmt(c[1])}</small>${c[0]}</button>`).join('');
+$$('.chip').forEach(b=>b.onclick=()=>{const v=$('#vid');v.currentTime=+b.dataset.t;v.play().catch(()=>{});v.scrollIntoView({block:'center',behavior:'smooth'})});
+
+/* layers */
+const LAYER=[
+ '<b>資料層：</b>18 個 CSV 放在 <code>數據源_繁體</code> 資料夾，由 Power Query 讀入。<b>事實表 8 張</b>：資金流水（101,169 列）、金融日快照（44,972）、到期事項事件（53,649）、渠道結算（36,000）、帳戶日餘額（32,880）、預算預測（23,982）、金融業務事件（1,074）、每日匯率（3,288）。<b>維度表 10 張</b>：公司 6、幣種 4、往來方 300、日期 1,826、渠道 8、計畫版本 8、資金池 4、資金帳戶 30、資金專案 30、金融合同 120。',
+ '<b>模型層：</b>把 18 張表連起來（55 條關聯，全是多對一、單向篩選），再寫 <b>151 個度量值</b>。重點是「規則只寫一次」：可用資金、區域性缺口、預算執行率…所有頁面共用同一個定義，不會 A 頁一個算法、B 頁另一個。',
+ '<b>報告層：</b>首頁＋資金安全總覽＋5 個專題頁（收支與預算、渠道結算與到期、融資與金融工具、集團資金調配、跨境與匯率風險），共 7 頁。統計自各頁 visual.json：120 個視覺物件，包括 49 個導覽按鈕、18 個篩選器、9 個 HTML 內容視覺、8 個文字方塊，以及 24 個圖表（長條、折線、柱狀、環形、散點…）、5 張卡片、7 個表格／矩陣。']
+function setLayer(i){$$('.layer').forEach((b,j)=>b.setAttribute('aria-pressed',i===j));$('#layerInfo').innerHTML=LAYER[i]}
+$$('.layer').forEach(b=>b.onclick=()=>setLayer(+b.dataset.i));setLayer(0);
+
+/* six questions */
+const QS=[['誰會先缺錢？','看缺口：未來 13 週，哪個法人、哪種幣種、哪一天會跌破備付底線？',1],['錢花在哪？','看收支與預算：外部收付、經營／投資／籌資淨現金流，預算超支在哪？',2],['什麼時候收付？','看結算與到期：未結應收應付、逾期、未來到期排程與回款效率。',3],['借錢貴不貴？','看融資：利率、剩餘期限、本金；什麼時候要還、授信能不能頂上。',4],['能不能內部調配？','看調配：各法人餘缺、資金池同幣種還有多少匹配空間。',5],['外幣敞口要不要管？','看匯率：外幣資產負債、遠期調整後淨敞口、±5% 敏感性。',6]];
+$('#qgrid').innerHTML=QS.map((q,i)=>`<button class="q" data-p="${q[2]}"><div class="th"><img data-k="p${q[2]}_s" alt="第 ${q[2]} 頁縮圖"></div><h3><i>${i+1}</i>${q[0]}</h3><span>${q[1]}</span><br><span style="color:var(--orange);font-weight:800">→ 第 ${q[2]} 頁</span></button>`).join('');
+$$('#qgrid img').forEach(i=>i.src=IMGS[i.dataset.k]);
+$$('.q').forEach(b=>b.onclick=()=>{setPage(+b.dataset.p);$('#pages').scrollIntoView({behavior:'smooth'})});
+
+/* journey：事實_帳戶日餘額 2026-10-05 的真實三列（原幣元；公司與帳戶名稱由代號換成名稱） */
+const ROWS=`<tr><td>2026-10-05</td><td>星橋華東零售-人民幣基本戶</td><td>人民幣</td><td class="n">70,276,504.57</td><td class="n">0</td><td class="n">70,276,504.57</td><td class="n">700,000</td><td class="n">69,576,504.57</td><td class="n">1</td></tr>
+<tr><td>2026-10-05</td><td>星橋華北零售-人民幣基本戶</td><td>人民幣</td><td class="n">30,371,989.80</td><td class="n">76,000</td><td class="n">30,295,989.80</td><td class="n">700,000</td><td class="n">29,595,989.80</td><td class="n">1</td></tr>
+<tr><td>2026-10-05</td><td>星橋跨境運營-港幣戶</td><td>港幣</td><td class="n">10,146,266.94</td><td class="n">0</td><td class="n">10,146,266.94</td><td class="n">250,000</td><td class="n">3,463,693.43</td><td class="n">0.8625</td></tr>`;
+const cropBox=(pg,r,w)=>{const s=w/r[2];return `<div class="im" style="width:100%;max-width:${w}px;height:${Math.round(r[3]*s)}px;background-image:url(${IMGS['p'+pg]});background-size:${1920*s}px ${1080*s}px;background-position:${-r[0]*s}px ${-r[1]*s}px;background-repeat:no-repeat;border-radius:10px;border:1px solid var(--line)" role="img" aria-label="第 ${pg} 頁截圖局部"></div>`};
+const J=[
+ {t:'① 原始資料：一行＝一個帳戶在一天的餘額',p:'這是「事實_帳戶日餘額.csv」真實的三列（2026-10-05，節錄 9 欄，單位為原幣「元」；帳戶名稱已由代號換成名稱）。每一列只是一天的餘額狀態，還看不出是否夠用。',h:`<div class="scroll"><table class="t"><tr><th>日期</th><th>帳戶</th><th>幣種</th><th>期末餘額</th><th>其他受限</th><th>可用餘額</th><th>最低運營備付</th><th>可調配餘額</th><th>期末匯率</th></tr>${ROWS}</table></div><p class="hint">整張表 32,880 列＝30 個帳戶 × 1,096 天。港幣戶的「可調配」遠小於「可用」，因為還要扣調撥限制；匯率 0.8625＝每 1 港幣折 0.8625 人民幣。</p>`},
+ {t:'② 載入：Power Query 讀 CSV 資料夾',p:'CSV 的位置放在一個參數裡。換電腦，只要改這一個參數。',h:`<pre><span class="c">資料來源資料夾</span> = "D:\\PowerBI資金分析報告\\數據源_繁體"\n\n<span class="c">事實_帳戶日餘額</span> = <span class="k">Csv.Document</span>(\n  <span class="k">File.Contents</span>(<span class="k">Text.TrimEnd</span>(資料來源資料夾, {"/", "\\"}) &amp; "/事實_帳戶日餘額.csv"),\n  [Delimiter=",", Encoding=65001, …])</pre><p class="hint">取自 expressions.tmdl 與各表分割區（磁碟上的檔案）。你的電腦要改成自己的路徑（見最下方）。</p>`},
+ {t:'③ 建模：把表連起來',p:'餘額表用「日期鍵、公司鍵、帳戶鍵、幣種鍵、資金池鍵」連到 5 張維度表。連好之後，按任何維度都能切。',h:`<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:17px;line-height:2.2"><span class="pill">事實_帳戶日餘額</span>──日期鍵──▶<span class="pill">維度_日期</span><br><span class="pill">事實_帳戶日餘額</span>──公司鍵──▶<span class="pill">維度_公司</span><br><span class="pill">事實_帳戶日餘額</span>──帳戶鍵──▶<span class="pill">維度_資金帳戶</span><br><span class="pill">事實_帳戶日餘額</span>──幣種鍵──▶<span class="pill">維度_幣種</span><br><span class="pill">事實_帳戶日餘額</span>──資金池鍵──▶<span class="pill">維度_資金池</span></div><p class="hint">全模型共 55 條關聯：50 條啟用＋5 條停用的備用日期關聯。</p>`},
+ {t:'④ 計算：DAX 寫成一條規則',p:'可用資金＝在分析截止日那天，各帳戶「可用餘額 × 期末匯率」加總（折成人民幣）。',h:`<pre><span class="c">可用資金</span> =\n<span class="k">VAR</span> d = [分析截止日]\n<span class="k">RETURN</span>\n  <span class="k">IF</span>(\n    <span class="k">MIN</span>('維度_日期'[日期]) &lt;= [資料截止日],\n    <span class="k">CALCULATE</span>(\n      <span class="k">SUMX</span>(\n        '事實_帳戶日餘額',\n        '事實_帳戶日餘額'[可用餘額原幣] * '事實_帳戶日餘額'[期末匯率]\n      ),\n      <span class="k">REMOVEFILTERS</span>('維度_日期'),\n      '事實_帳戶日餘額'[日期鍵] = d\n    )\n  )</pre><p class="hint">完整定義取自模型的度量值「可用資金」；報表另有「可用資金（萬元）」把結果除以 1 萬給畫面用。</p>`},
+ {t:'⑤ 呈現：變成你看到的卡片',p:'同一條公式，放進卡片、趨勢圖、明細表。你按篩選器（公司、幣種、情境），它們一起變。',h:`<div class="shot zoomable" data-key="p1" style="padding:10px">${'<!--crop5-->'}</div><p class="hint">第 1 頁最上方的四張 KPI 卡：當期可用現金 42,961.7、13 週最低 35,812.5、缺口峰值 908.6、可提款授信 7,707.2（萬元）。</p>`}];
+const stepsEl=$('#steps');let cur=0;
+J.forEach((s,i)=>{const b=document.createElement('button');b.className='step';b.setAttribute('role','tab');b.innerHTML=`<span class="no">${i+1}</span><span>${s.t.replace(/^.\s/,'').split('：')[0]}</span>`;b.onclick=()=>setStep(i);stepsEl.appendChild(b)});
+function setStep(i){cur=i;$$('.step').forEach((b,j)=>b.setAttribute('aria-selected',i===j));const s=J[i];let h=s.h.replace('<!--crop5-->',cropBox(1,[288,276,1590,113],900));$('#stage').innerHTML=`<h3>${s.t}</h3><p>${s.p}</p>${h}<div style="margin-top:16px;display:flex;gap:8px"><button class="btn" ${i?'':'disabled'} onclick="setStep(${i-1})">← 上一步</button><button class="btn pri" ${i<J.length-1?'':'disabled'} onclick="setStep(${i+1})">下一步 →</button></div>`;$$('#stage img[data-k]').forEach(im=>im.src=IMGS[im.dataset.k])}
+setStep(0);
+
+/* star */
+const FACT=[
+ ['事實_資金流水','101,169','22','每筆資金收支一列：記帳日期、價值日期、帳戶、往來方、專案、合同、收支方向、金額（原幣／人民幣）、是否集團內部、交易狀態…（外部收付與淨現金流從這裡算）'],
+ ['事實_金融日快照','44,972','24','每個「合同 × 日」一列：存續本金、應計利息、剩餘期限天數、執行年利率、授信額度與占用、可提前變現與成本、遠期買入／賣出…（貸款餘額、加權利率、授信從這裡算）'],
+ ['事實_到期事項事件','53,649','20','每個應收／應付事項的事件：事項編號、分期、原到期日、新到期日、應收應付方向、計畫與核銷金額變動（未結與逾期、到期排程從這裡算）'],
+ ['事實_渠道結算','36,000','13','每個渠道結算批次：業務日期、預計與實際到帳日期、消費者支付、退款、支付手續費、預計淨到帳（遲到金額率與回款週期從這裡算）'],
+ ['事實_帳戶日餘額','32,880','20','每個「帳戶 × 日」一列：期末餘額、凍結、其他受限、可用、最低運營備付、可調配、調撥限制、期末匯率（可用資金與可調配資金從這裡算；時點快照，不可跨日加總）'],
+ ['事實_預算預測','23,982','24','每個計畫版本的預算／預測：版本、日期、專案、基準金額、情境調整、計畫金額（原幣／人民幣）、假設類別與說明、預計可用資金變動（13 週預測與預算執行從這裡算）'],
+ ['事實_金融業務事件','1,074','18','每筆融資事件：業務日期、事件型別、本金變動、利息、手續費、稅費、實際執行年利率、是否現金事件'],
+ ['事實_每日匯率','3,288','6','每個「幣種 × 日」一列：每單位外幣兌人民幣、匯率來源、是否沿用前值、是否模擬資料（匯率指數與折算用）']];
+const DIM={
+ '維度_公司':['6','7','公司名稱（集團總部、華東零售、華南零售、華北零售、跨境運營、香港貿易）・型別・所在地區・本位幣・是否總部・是否納入合併'],
+ '維度_幣種':['4','5','人民幣（報告幣種）、美元、歐元、港幣・幣種代碼・小數位'],
+ '維度_日期':['1,826','11','日期・年份・季度・月份・年月・週起始日・是否工作日・是否月末・促銷階段（2023-01-01 至 2027-12-31）'],
+ '維度_往來方':['300','7','往來方名稱・型別・所在地區・關聯公司・信用等級・是否集團內部'],
+ '維度_渠道':['8','5','渠道名稱（自營商城、直播電商、第三方綜合商城、跨境美國站…）・型別・境內跨境標識・預設結算週期'],
+ '維度_計畫版本':['8','9','版本名稱・版本類別・預算年度・基準日期・情境名稱・批准狀態・生效日期・是否基準版本'],
+ '維度_資金池':['4','7','資金池名稱（人民幣、美元、歐元資金池…）・管理公司・池幣種・歸集方式・調撥範圍・限制說明'],
+ '維度_資金帳戶':['30','10','帳戶名稱・所屬公司・開戶機構・帳戶型別・幣種・資金池・是否監管帳戶・啟用／停用日期'],
+ '維度_資金專案':['30','7','一級／二級分類・經營投資籌資類別・收支方向・是否內部劃轉・展示排序'],
+ '維度_金融合同':['120','19','合同編號・型別・起始／到期日期・合同額度・期初本金・利率型別・初始年利率・計息基礎・付息頻率・關聯授信・遠期買入／賣出幣種・約定匯率…']};
+const E={ // 事實 → [維度…]（* 結尾＝停用的備用關聯）；合計 55 條，與 relationship List 相符
+ '事實_資金流水':['維度_公司','維度_資金帳戶','維度_幣種','維度_渠道','維度_往來方','維度_資金專案','維度_金融合同','維度_資金池','維度_日期','維度_日期*'],
+ '事實_金融日快照':['維度_公司','維度_幣種','維度_往來方','維度_金融合同','維度_資金池','維度_日期'],
+ '事實_到期事項事件':['維度_公司','維度_幣種','維度_渠道','維度_往來方','維度_資金專案','維度_金融合同','維度_日期','維度_日期*','維度_日期*'],
+ '事實_渠道結算':['維度_公司','維度_幣種','維度_渠道','維度_往來方','維度_日期','維度_日期*','維度_日期*'],
+ '事實_帳戶日餘額':['維度_公司','維度_資金帳戶','維度_幣種','維度_資金池','維度_日期'],
+ '事實_預算預測':['維度_公司','維度_幣種','維度_渠道','維度_資金專案','維度_金融合同','維度_資金池','維度_計畫版本','維度_日期'],
+ '事實_金融業務事件':['維度_公司','維度_資金帳戶','維度_幣種','維度_往來方','維度_資金專案','維度_金融合同','維度_資金池','維度_日期'],
+ '事實_每日匯率':['維度_幣種','維度_日期']};
+(function(){const svg=$('#starSvg');let h='';
+ const FX=450,fy=i=>70+i*78;
+ const left=['維度_公司','維度_幣種','維度_日期','維度_往來方','維度_渠道'],right=['維度_資金池','維度_資金帳戶','維度_資金專案','維度_金融合同','維度_計畫版本'];
+ const dpos={};left.forEach((n,i)=>dpos[n]=[110,90+i*130]);right.forEach((n,i)=>dpos[n]=[790,90+i*130]);
+ const edges=[];
+ FACT.forEach((f,fi)=>{(E[f[0]]||[]).forEach(d=>{const off=d.endsWith('*'),dn=d.replace('*',''),[x,y]=dpos[dn],isL=x<450;
+   const x1=isL?x+90:x-90,x2=isL?FX-115:FX+115,y2=fy(fi)+26,mx=(x1+x2)/2;
+   edges.push(`<path class="edge${off?' off':''}" data-a="${dn}" data-b="${f[0]}" d="M${x1},${y} C${mx},${y} ${mx},${y2} ${x2},${y2}"/>`)})});
+ h+=edges.join('');
+ FACT.forEach((f,i)=>{h+=`<g class="node" tabindex="0" role="button" data-n="${f[0]}" aria-label="${f[0]}"><rect x="${FX-115}" y="${fy(i)}" width="230" height="52" rx="12" fill="#f6b47c" stroke="#e9792f" stroke-width="2"/><text x="${FX}" y="${fy(i)+32}" text-anchor="middle" fill="#3b1d05" font-size="${f[0].length>9?15:17}">${f[0]}</text></g>`});
+ Object.entries(dpos).forEach(([n,[x,y]])=>{h+=`<g class="node" tabindex="0" role="button" data-n="${n}" aria-label="${n}"><rect x="${x-90}" y="${y-26}" width="180" height="52" rx="12" fill="#a6e6d6" stroke="#2fb59a" stroke-width="2"/><text x="${x}" y="${y+7}" text-anchor="middle" fill="#0b3b30" font-size="${n.length>7?15:17}">${n}</text></g>`});
+ h+=`<text x="450" y="36" text-anchor="middle" fill="#e9792f" font-weight="800" font-size="20">事實表 ×8</text><text x="110" y="36" text-anchor="middle" fill="#2fb59a" font-weight="800" font-size="20">維度表</text><text x="790" y="36" text-anchor="middle" fill="#2fb59a" font-weight="800" font-size="20">維度表</text>`;
+ svg.innerHTML=h;
+ function sel(n){$$('.node',svg).forEach(g=>g.classList.toggle('on',g.dataset.n===n));$$('.edge',svg).forEach(e=>e.classList.toggle('hi',e.dataset.a===n||e.dataset.b===n));
+  const f=FACT.find(x=>x[0]===n),isF=!!f;let rows,cols,desc,links;
+  if(isF){rows=f[1];cols=f[2];desc=f[3];links=[...new Set((E[n]||[]).map(x=>x.replace('*','')))]}
+  else{const d=DIM[n];rows=d[0];cols=d[1];desc=d[2];links=FACT.filter(ff=>(E[ff[0]]||[]).some(x=>x.replace('*','')===n)).map(ff=>ff[0])}
+  $('#nodeInfo').innerHTML=`<span class="tag ${isF?'f':'d'}">${isF?'事實表':'維度表'}</span><h3>${n}</h3><p style="font-size:34px;font-weight:800;color:var(--teal2)">${rows} <small style="font-size:16px;color:var(--mut)">列 · ${cols} 欄</small></p><p style="margin:8px 0;color:var(--mut)">${desc}</p><p><b>連到（${links.length}）：</b></p>${links.map(l=>`<span class="pill">${l}</span>`).join('')}`}
+ $$('.node',svg).forEach(g=>{g.onclick=()=>sel(g.dataset.n);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();sel(g.dataset.n)}}});sel('事實_帳戶日餘額')})();
+
+/* pages：熱點座標用頁面座標（1920×1080）換算成百分比，不用像素 */
+const R=(x,y,w,h)=>({l:x/19.2,t:y/10.8,w:w/19.2,h:h/10.8});
+const P=[
+ {n:'首頁',q:'一進來，先看見什麼？',d:'標題、四個主題、「進入資金分析」按鈕，和 4 個總覽數字。',hs:[[R(100,791,1719,175),'四個總覽數字','可用資金 42,961.7、可調配資金 34,527.8、13 週最低可用 35,812.5、13 週區域性最大缺口 908.6（萬元）。資料截止 2026-10-05。'],[R(88,230,500,170),'報告標題','「讓資金流向更有價值的地方」；副標寫明四個主題：資金安全／預算執行／集團調配／跨境風險。'],[R(100,584,197,62),'進入資金分析','按鈕帶你去「資金安全總覽」。設計上是「先看全局，再逐層深入」。'],[R(100,1043,290,20),'模擬資料聲明','首頁左下角註明：報告中出現的名稱和數字均為模擬資料。']]},
+ {n:'資金安全總覽',q:'接下來 13 週，誰會先缺錢？',d:'一句話判斷、4 張 KPI、13 週每日缺口曲線、責任主體清單，加「支付壓力」與「下一步」。',hs:[[R(287,138,1592,119),'一句話判斷','「總量充裕，區域性存在資金缺口」：重點關注星橋香港貿易・人民幣；預警法人 1 家、距首次缺口 10 天（基準日 2026-10-05）。'],[R(288,276,1590,113),'4 張 KPI','當期可用現金 42,961.7（受限 35.2 已剔除）；13 週最低 35,812.5（備付底線 1,209.8，覆蓋 29.6 倍）；缺口峰值 908.6（12-25）；可提款授信 7,707.2（未計入現金）。'],[R(289,402,782,337),'未來 13 週每日區域性缺口','階梯狀上升：10-15 起出現缺口，約 12-25 到峰值 908.6 萬元。頁面可切換判斷情境（基準情境為預設）。'],[R(1088,402,782,337),'資金缺口責任主體','6 家法人中，只有星橋香港貿易「存在資金缺口」（908.6 萬、首次 10-15、人民幣）；其餘未觸線。'],[R(287,763,785,287),'支付壓力來自哪裡','合同到期：流入 1,336.8／流出 9,829.0，淨 −8,492.2；新增業務假設淨 +1,560.9（假設）；預測合計淨 −6,931.3。合同回款／合同支出＝13.6%。'],[R(1088,763,782,287),'下一步，先做什麼？','三步：10-15 前完成缺口補足安排；核對同池、同幣種調配（覆蓋 100%）；逐筆排付款，再評估備用融資（未來 30 日應付 4,812.5、可提款授信 7,707.2）。']]},
+ {n:'收支與預算',q:'錢花在哪，預算跑偏了多少？',d:'外部收付趨勢、經營／投資／籌資淨現金流、法人與專案的預算偏差。預算比較限定完整月份與可比項目。',hs:[[R(288,165,1595,150),'6 張 KPI','外部資金流入 309,099；流出 271,783；淨現金流 37,316；經營淨現金流 38,566；預算支出偏差 24,933；預算執行率 110.5%（萬元）。'],[R(288,331,1059,248),'月度外部流入、流出與淨現金流','三條線按月看流入、流出與淨額，月份從 2023-10 到 2026-10。'],[R(1358,331,527,248),'完整月預算偏差','正值＝超支、負值＝未執行。自營採購付款超支最多（20,785.5 萬元）。'],[R(1358,595,524,188),'淨現金流構成','經營 +38,565.8；投資 −55.2；籌資 −1,194.6（萬元）。'],[R(288,593,1055,190),'月度預算執行率','完整月可比口徑；圖中虛線旁標示 112.1%。'],[R(288,799,1054,271),'法人 × 專案明細','展開到專案：預算、實際、偏差、執行率。例如華東零售的自營採購付款 111.5%、工資支出 66.7%。'],[R(1358,799,524,271),'法人預算執行率排名','星橋香港貿易 126.1% 最高，其次集團總部 112.1%、華北零售 111.3%；最低是華南零售 106.6%。']]},
+ {n:'渠道結算與到期',q:'該收的、該付的，什麼時候？',d:'未結應收應付、逾期應收、未來到期排程與事項明細；再用到帳週期、遲到金額率看回款效率。',hs:[[R(293,165,1581,150),'6 張 KPI','未結應收 1,337；逾期應收 71；未來 30 日應付 4,813；近 90 日遲到金額率 0.1%；逾期率 5.3%；逾期應付 0（萬元）。'],[R(288,329,672,397),'未來 13 週到期收付','以固定截止日的未結存量，看每週到期的應收（藍）與應付（綠）。'],[R(970,329,501,397),'法人未結應收應付','各法人未結應收與應付。'],[R(1483,329,394,397),'渠道到期壓力','逾期應收與未來 30 日應付：非銷售渠道 1,739.8 最大，其次自營商城 667.8、第三方綜合商城 650.3。'],[R(288,737,782,328),'未結事項與責任方','列出到期日、應收應付方向、逾期天數，可核對到「事項」與往來方。'],[R(1085,737,792,328),'近 90 日回款週期','香港站、跨境美國站、跨境歐洲站的週期為 14.0 天（遲到率 2.3%）；其他渠道 0.7%。']]},
+ {n:'融資與金融工具',q:'借錢貴不貴，什麼時候要還？',d:'利率、剩餘期限、本金三個維度放在一起，加餘額趨勢、存續合同與未來到期本金。',hs:[[R(293,165,1581,150),'6 張 KPI','貸款餘額 7,017；融資利息支出 1,195；加權執行年利率 5.73%；可提款授信 7,707；票據餘額 176；30 日到期債務本金 1,598（萬元）。'],[R(290,326,790,358),'氣泡圖','橫軸合同剩餘天數、縱軸加權年利率、氣泡大小＝存續本金。越靠右上，利率越高、離到期越遠。'],[R(1088,326,520,358),'餘額趨勢','貸款、理財、票據餘額（2024–2026）：貸款約在 7,000 萬元上下。'],[R(1618,326,257,358),'金融工具本金結構','貸款 7,017（96%）、應付票據 176（2%）、理財 80（1%）；合計 7,273（萬元）。'],[R(290,693,790,370),'存續合同','逐筆列示合同編號、型別、到期日、當前本金、加權年利率、可變現理財…'],[R(1085,693,792,372),'未來 13 週到期本金','貸款／票據本金到期（不含利息）；單週最高約 738 萬元（12-01 前後）。']]},
+ {n:'集團資金調配',q:'能不能先不借，在集團內部解決？',d:'各法人的可調配資金、供給與缺口，再用資金池矩陣核查同池、同幣種還有多少匹配空間。',hs:[[R(293,165,1581,150),'6 張 KPI','參與資金池可調配 33,188；調撥限制金額 4,736；13 週最大區域性缺口 909；峰值日同池穩健匹配 909；匹配後缺口 0；受限資金 35（萬元）。'],[R(290,329,526,274),'法人可調配資金與缺口','華東零售約 10.4 千（≈10,400 萬元）最多，其次華南零售 8.2 千、跨境運營 5.8 千。'],[R(826,329,521,274),'誰能提供資金、誰存在缺口','穩健同池供給（藍）對比 13 週最大區域性缺口（綠）。'],[R(1356,331,520,273),'法人調撥限制與可調配資金','各法人的調撥限制金額與可調配資金對照。'],[R(290,612,787,223),'同池同幣種匹配','美元池 7,737.2、歐元池 3,936.9、人民幣池 14,997.3（穩健供給，合計 26,671.5）；只有人民幣池有匹配 908.6，匹配後缺口 0.0。'],[R(1085,612,790,219),'資金池供給與匹配後缺口','各資金池穩健供給與匹配後缺口。'],[R(288,839,1584,236),'資金池 → 法人 → 幣種','可展開到法人與幣種，核查還有多少匹配空間。頁面給的是候選安排，調撥仍須審批。']]},
+ {n:'跨境與匯率風險',q:'外幣敞口要不要管？',d:'外幣資產負債、遠期調整前後的淨敞口、匯率指數與 ±5% 敏感性，加外幣對外收付。',hs:[[R(293,165,1584,150),'6 張 KPI','外幣資產 25,029；外幣負債 5,413；對沖前淨敞口 19,616；遠期調整後 19,824；各幣種不利 5% 影響 −991；遠期淨買入 208（萬元）。'],[R(288,326,526,240),'資產、負債與遠期調整後敞口','按美元、歐元、港幣分組的方向性敞口。'],[R(823,326,1057,240),'外幣兌人民幣匯率指數','2023-10-06＝100；上升＝外幣走強。美元、歐元、港幣三條線。'],[R(288,581,526,216),'實際外幣對外收付','外幣對外流入／流出（萬元）：美元 35,877／27,369；歐元 24,600／18,704；港幣 14,708／11,059。'],[R(823,583,529,216),'遠期對沖前後敞口','美元 9,765→9,866；歐元 6,717→6,825；港幣 3,134 不變。遠期淨買入反而讓敞口變大。'],[R(1363,583,516,216),'匯率敏感性 ±5%','美元 ±493.3；歐元 ±341.2；港幣 ±156.7（萬元，靜態敏感性，不等於已實現損益）。'],[R(288,824,1065,232),'幣種敞口與風險明細','對沖前、遠期淨買入、調整後、±5% 影響、敞口方向、敞口變化；正向變化表示風險放大。'],[R(1363,824,516,232),'法人外幣對外收付','各法人的外幣對外流入／流出；華東零售流入最大（約 18.6 千＝18,600 萬元）。']]}];
+const tabs=$('#ptabs');let pi=0;
+const TABN=['首頁','資金安全','收支預算','結算到期','融資工具','集團調配','跨境匯率'];
+P.forEach((p,i)=>{const b=document.createElement('button');b.className='tab';b.setAttribute('role','tab');b.textContent=i?i+'. '+TABN[i]:TABN[0];b.onclick=()=>setPage(i);tabs.appendChild(b)});
+function setPage(i){pi=i;const p=P[i];$$('.tab').forEach((b,j)=>b.setAttribute('aria-selected',i===j));const im=$('#pimg');im.src=IMGS['p'+i+'_s'];im.dataset.key='p'+i;im.alt=`${p.n}頁面截圖：${p.d}`;
+ $$('.hs').forEach(e=>e.remove());p.hs.forEach((h,k)=>{const r=h[0],b=document.createElement('button');b.className='hs';b.style.cssText=`left:${r.l}%;top:${r.t}%;width:${r.w}%;height:${r.h}%`;b.setAttribute('aria-label',h[1]);b.onclick=e=>{e.stopPropagation();showHs(k)};$('#pshot').appendChild(b)});
+ $('#pside').innerHTML=`<span class="tag f">${i?'第 '+i+' 頁':'首頁'}</span><h3>${p.n}</h3><div class="qq">${p.q}</div><p>${p.d}</p><div id="hsInfo">👆 點圖上的橘點，看這塊在回答什麼。</div><button class="btn hotbtn" onclick="showHs(0)">逐個看重點</button>`}
+function showHs(k){const p=P[pi];k=k%p.hs.length;$$('.hs').forEach((e,j)=>e.classList.toggle('on',j===k));const h=p.hs[k];$('#hsInfo').innerHTML=`<b>${h[1]}</b><br>${h[2]}`;$('.hotbtn').setAttribute('onclick',`showHs(${k+1})`);$('.hotbtn').textContent=k+1<p.hs.length?'下一個重點 →':'回到第一個 ↺'}
+setPage(0);
+
+/* flips：DAX 取自模型度量值（縮排整理；標「簡化」者為節錄） */
+const F=[
+ {t:'可用資金',s:'某一天、折成人民幣的可動用餘額',m:'在分析截止日那天，各帳戶的「可用餘額 × 期末匯率」加總。',c:`可用資金 =\nVAR d = [分析截止日]\nRETURN\n  IF(\n    MIN('維度_日期'[日期]) <= [資料截止日],\n    CALCULATE(\n      SUMX('事實_帳戶日餘額',\n        '事實_帳戶日餘額'[可用餘額原幣]\n        * '事實_帳戶日餘額'[期末匯率]),\n      REMOVEFILTERS('維度_日期'),\n      '事實_帳戶日餘額'[日期鍵] = d\n    )\n  )`},
+ {t:'區域性備付缺口',s:'每個法人×幣種分別算，不互相抵銷',m:'備付底線 − 預計可用資金，不足才算缺口（最小為 0），再加總。',c:`區域性備付缺口 =  -- 簡化\nSUMX(\n  CROSSJOIN(\n    VALUES('維度_公司'[公司鍵]),\n    VALUES('維度_幣種'[幣種鍵])\n  ),\n  VAR funds = CALCULATE([預計可用資金])\n  VAR floor = CALCULATE([預測備付底線])\n  RETURN MAX(0, floor - funds)\n)`},
+ {t:'預算執行率',s:'花了預算的幾成',m:'可比實際支出 ÷ 可比預算支出；只比完整月份與可比項目。超過 100%＝超支。',c:`預算執行率 =\nDIVIDE(\n  [可比實際支出],\n  [可比預算支出]\n)`},
+ {t:'近九十日遲到金額率',s:'回款遲到的金額占比',m:'近 90 日「遲到才到帳」的金額 ÷ 同期已到帳金額；沒有遲到時為 0。',c:`近九十日遲到金額率 =\nDIVIDE(\n  COALESCE(\n    [近九十日遲到到帳（萬元）], 0),\n  [近九十日已到帳（萬元）]\n)`},
+ {t:'加權執行年利率',s:'借款的平均利率（按本金加權）',m:'在分析截止日，各筆貸款「存續本金 × 匯率 × 執行年利率」加總 ÷ 「存續本金 × 匯率」加總。',c:`加權執行年利率 =  -- 簡化\nDIVIDE(\n  SUMX(FILTER('事實_金融日快照',\n         [記錄類別] = "貸款"),\n    [存續本金原幣] * [期末匯率]\n    * [執行年利率]),\n  SUMX(FILTER('事實_金融日快照',\n         [記錄類別] = "貸款"),\n    [存續本金原幣] * [期末匯率])\n)  -- 日期＝分析截止日`},
+ {t:'對沖後淨敞口',s:'遠期之後還剩多少外幣風險',m:'對沖前淨敞口（外幣資產 − 外幣負債）再加上遠期淨買入。保留舊名稱供相容，不保證風險下降。',c:`對沖前淨敞口 =\n  [外幣資產] - [外幣負債]\n\n對沖後淨敞口 =\n  [對沖前淨敞口]\n  + [遠期淨買入（萬元）] * 10000`}];
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+F.forEach(f=>{const b=document.createElement('button');b.className='flip';b.setAttribute('aria-pressed','false');b.innerHTML=`<div class="in"><div class="f"><h3>${f.t}</h3><b>${f.s}</b><p>${f.m}</p><span class="tapme">點一下看公式 ↻</span></div><div class="b"><pre style="background:none;padding:0;white-space:pre">${esc(f.c)}</pre></div></div>`;b.onclick=()=>b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');$('#flips').appendChild(b)});
+
+/* guide（從 1920 寬的頁面圖裁切） */
+const G=[['卡片（KPI）','看重點數字',1,[288,276,384,113]],['階梯面積圖','看未來 13 週每日缺口的累積變化',1,[289,402,782,337]],['氣泡圖','同時看利率、剩餘天數與本金',4,[290,326,790,358]],['環形圖','看結構占比（金融工具本金）',4,[1618,436,257,180]],['矩陣表','資金池 → 法人 → 幣種 交叉對照',5,[288,839,820,200]],['折線圖','看匯率指數的長期走勢',6,[823,326,1057,240]]];
+G.forEach(g=>{const [n,u,pg,r]=g,W=360,sc=W/r[2],H=Math.min(250,r[3]*sc);const d=document.createElement('div');d.className='card gc';d.innerHTML=`<div class="im" style="width:100%;height:${H}px;background-image:url(${IMGS['p'+pg]});background-size:${1920*sc}px ${1080*sc}px;background-position:${-r[0]*sc}px ${-r[1]*sc}px" role="img" aria-label="${n}範例"></div><b>${n}</b><p>${u}</p>`;$('#guide').appendChild(d)});
+
+/* measure bars（INFO.VIEW.MEASURES 的 displayFolder 第一層，共 151） */
+const M=[['展示輔助',49,1],['融資工具',20,0],['資金安全',17,0],['結算到期',17,0],['跨境匯率',12,0],['收支預算',11,0],['匯率風險',10,0],['預測流動性',8,0],['集團調配',7,0]];
+$('#mbars').innerHTML=M.map(m=>`<div class="mrow ${m[2]?'disp':''}"><span>${m[0]}</span><div class="mbar"><i data-w="${m[1]/49*100}"></i></div><b>${m[1]}</b></div>`).join('');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){$$('.mbar i',e.target).forEach(i=>i.style.width=i.dataset.w+'%');o.unobserve(e.target)}}),{threshold:.3}).observe($('#mbars'));
+</script>
+</body>
+</html>
