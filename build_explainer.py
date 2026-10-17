@@ -8,14 +8,21 @@ d={}
 for i in range(7):
     for k in (f'p{i}',f'p{i}_s'):
         d[k]='data:image/jpeg;base64,'+base64.b64encode(open(f'assets/{k}.jpg','rb').read()).decode()
-assert '/*IMGS*/{}' in t and '/*CH*/[]' in t
+assert '/*IMGS*/{}' in t and '/*CH*/[]' in t and '/*CH2*/[]' in t
 t=t.replace('/*IMGS*/{}',json.dumps(d,ensure_ascii=False))
 TL=json.load(open('film/timeline.json',encoding='utf-8'))
 NAME={'s01':'開場','s02':'首頁','s03':'六個問題','sT':'四個詞','s04':'第1頁 資金安全','s05':'第2頁 收支預算','s06':'第3頁 結算到期',
       's07':'第4頁 融資工具','s08':'第5頁 集團調配','s09':'第6頁 跨境匯率','s10':'度量值','s11':'星狀模型','s12':'結語'}
 CH=[[NAME[s['k']],round(s['T'],1)] for s in TL['scenes']]
 t=t.replace('/*CH*/[]',json.dumps(CH,ensure_ascii=False))
+# 故事動畫章節：同樣取自動畫 timeline.json 的場景起點（animation/timeline.json）
+TL2=json.load(open('animation/timeline.json',encoding='utf-8'))
+NAME2={'s00-title':'片頭','s01-call':'一通電話','s02-pockets':'六個口袋','s03-safety':'第一站 資金安全','s04-flows':'第二站 收支預算',
+       's05-timeline':'第三站 結算到期','s06-borrow':'第四站 融資工具','s07-pool':'第五站 集團調配','s08-fx':'第六站 跨境匯率','s09-evening':'傍晚'}
+CH2=[[NAME2[s['id']],round(s['startFrame']/TL2['fps'],1)] for s in TL2['scenes']]
+t=t.replace('/*CH2*/[]',json.dumps(CH2,ensure_ascii=False))
 out=sys.argv[1] if len(sys.argv)>1 else 'explainer.html'
 open(out,'w',encoding='utf-8').write(t)
 print(round(len(t.encode('utf-8'))/1e6,2),'MB ->',out)
 print('chapters:',CH)
+print('chapters2:',CH2)

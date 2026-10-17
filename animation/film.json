@@ -1,0 +1,224 @@
+{
+  "schema": "code-animation/v1",
+  "title": "有個口袋在冒汗——PowerBI資金分析報告",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "seed": 20261017,
+  "speechCharsPerSecond": 4.0,
+  "scenes": [
+    {
+      "id": "s00-title",
+      "title": "片頭",
+      "visual": {
+        "subject": {
+          "id": "pockets-line",
+          "type": "pocket-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "sway",
+          "effect": "mg-title"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 3.0,
+      "leadSeconds": 0.0,
+      "tailSeconds": 0.0,
+      "narration": ""
+    },
+    {
+      "id": "s01-call",
+      "title": "一通電話",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "phone-call",
+          "effect": "mg-tiles"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 1.6,
+      "narration": "集團的早晨，從老闆的一通電話開始。老闆問：帳上有錢嗎？小衡看了一眼Power BI報表：有，約四點三億元。老闆說：那就好。小衡補一句：不過，有個口袋，十月十五日會先見底。電話那頭，安靜了。",
+      "voice": "audio/s01-call.wav"
+    },
+    {
+      "id": "s02-pockets",
+      "title": "六個口袋",
+      "visual": {
+        "subject": {
+          "id": "pockets",
+          "type": "pocket-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "pop-in",
+          "effect": "mg-split"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 6,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.45,
+      "narration": "星橋集團有六個口袋：總部、華東、華南、華北、跨境運營、香港貿易。錢不是一鍋粥，是六個口袋，各有各的脾氣。",
+      "voice": "audio/s02-pockets.wav"
+    },
+    {
+      "id": "s03-safety",
+      "title": "第一站・資金安全總覽",
+      "visual": {
+        "subject": {
+          "id": "pocket-hk",
+          "type": "pocket-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "sweat",
+          "effect": "mg-chart"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 12,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第一頁，一句話判斷：總量充裕，區域性存在資金缺口。最低也有約三點六億元，是備付底線的二十九點六倍，穩得很。可是按法人和幣種分開看，香港貿易的人民幣口袋，十月十五日開始見底，缺口最大約九百零九萬元。整座水庫是滿的，偏偏有一戶的水龍頭，在咳嗽。原因是合同回款，只夠付支出的百分之十三點六。",
+      "voice": "audio/s03-safety.wav"
+    },
+    {
+      "id": "s04-flows",
+      "title": "第二站・收支與預算",
+      "visual": {
+        "subject": {
+          "id": "yuanqi",
+          "type": "yuanqi-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "flow",
+          "effect": "mg-gauge"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第二頁看收支。淨現金流約三點七億元，全靠經營活動撐著。預算執行率百分之一百一十點五，在財務圈，這不叫超標達成，叫超支。各法人裡，香港貿易最高，一百二十六點一，這個口袋，今天特別忙。",
+      "voice": "audio/s04-flows.wav"
+    },
+    {
+      "id": "s05-timeline",
+      "title": "第三站・渠道結算與到期",
+      "visual": {
+        "subject": {
+          "id": "yuanqi",
+          "type": "yuanqi-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "walk-slow",
+          "effect": "mg-calendar"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第三頁看時間表。未結應收約一千三百三十七萬元，逾期七十一萬元，逾期率百分之五點三，像朋友說下週還，結果慢了一點點。自家的逾期應付是零，是個準時付款的好公民。未來三十日要付約四千八百一十三萬元。",
+      "voice": "audio/s05-timeline.wav"
+    },
+    {
+      "id": "s06-borrow",
+      "title": "第四站・融資與金融工具",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "bump-glass",
+          "effect": "mg-bank"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第四頁看借錢。貸款餘額約七千零一十七萬元，加權年利率百分之五點七三。另有可提款授信約七千七百零七萬元，但授信只是備用額度，像朋友說缺錢跟我說，心意收下，房租不能用心意付。理財可變現，是零。",
+      "voice": "audio/s06-borrow.wav"
+    },
+    {
+      "id": "s07-pool",
+      "title": "第五站・集團資金調配",
+      "visual": {
+        "subject": {
+          "id": "yuanqi",
+          "type": "yuanqi-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "queue-walk",
+          "effect": "mg-pool"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第五頁，是小衡最喜歡的一頁：先別急著借，看看家裡誰有餘。人民幣資金池約一點五億元，補得上香港貿易九百零九萬元的缺口，匹配後缺口是零。不過這只是候選安排，要經過審批。再熱心的口袋，也得等簽核點頭。",
+      "voice": "audio/s07-pool.wav"
+    },
+    {
+      "id": "s08-fx",
+      "title": "第六站・跨境與匯率風險",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "stack",
+          "effect": "mg-tower"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "最後一頁看匯率。對沖前的淨敞口約一點九六億元，美元最大。做了遠期，淨敞口反而從一億九千六百一十六萬元，增加到一億九千八百二十四萬元，因為買進的方向，和原本的多頭同一邊。就像想減肥，卻多點了一份炸雞。各幣種不利變動百分之五，影響約負九百九十一萬元。",
+      "voice": "audio/s08-fx.wav"
+    },
+    {
+      "id": "s09-evening",
+      "title": "傍晚",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "stitch",
+          "effect": "mg-endcard"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 3.2,
+      "narration": "傍晚，老闆又打來：所以，我們到底有沒有錢？小衡笑了：有。好的資金分析，不是告訴你還剩多少，而是告訴你，接下來該做什麼安排。至少這一晚，小衡知道該去敲哪一扇門，而那個口袋，還來得及補回元氣。",
+      "voice": "audio/s09-evening.wav"
+    }
+  ],
+  "audioTracks": [
+    { "file": "audio/music.wav", "startSeconds": 0, "gain": 1.0 },
+    { "file": "audio/sfx.wav", "startSeconds": 0, "gain": 1.0 }
+  ]
+}

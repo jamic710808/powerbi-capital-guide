@@ -1,0 +1,782 @@
+{
+  "schema": "code-animation/v1",
+  "locked": true,
+  "filmSha256": "e06e6d135ec91441c8bcead960c8c10829144aa2b98a531a0b16d1ff07b3d765",
+  "assetSha256": {
+    "audio/s01-call.wav": "e796731bc015558fe2fccaf580f183cbcc2d94872d5768a9e7fccc4c512146e6",
+    "audio/s02-pockets.wav": "8ed791846249094faadcf66955d2c673064d66fe9906ce66289d437c69631159",
+    "audio/s03-safety.wav": "76e74cfc93f1ee3c4c96eef334ca4ea643ee5a50f3bae92090330fca4f71513d",
+    "audio/s04-flows.wav": "f75f25c8f8d82ad9d155bb27f3410eeab1cc2967a04c372bac5d5cd0564d7530",
+    "audio/s05-timeline.wav": "f78a19ba403e7ee5d8f6c27b37f6580f6317c33186367826a05bf06bba9d85f1",
+    "audio/s06-borrow.wav": "d9cd328a603ed66c691745c2c4c3a5de70e8507048d82677d4eea024db8b9fd6",
+    "audio/s07-pool.wav": "3ac33fe00523705ddaadd6117772424230b79bea3a58b243cbd7d094354d90e7",
+    "audio/s08-fx.wav": "f0419a223effb69935eba7cd89976e691d48ca3699129c8c927dd367df3dd1e4",
+    "audio/s09-evening.wav": "afcab274cafcce1a4974e23e0fc37e8731ee5df6d83e1ff04e07d02880579a7c",
+    "audio/music.wav": "d740976425638f4f88b87280f1e94abb1a4c4a5bffd2f3739ef68c569008f8a5",
+    "audio/sfx.wav": "d53f0bcdb1c710bf03cbc288ecc6a646091a1810bf70b08a50f2152887243d14"
+  },
+  "title": "有個口袋在冒汗——PowerBI資金分析報告",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "totalFrames": 6485,
+  "durationSeconds": 216.16666666666666,
+  "seed": 20261017,
+  "scenes": [
+    {
+      "id": "s00-title",
+      "title": "片頭",
+      "visual": {
+        "subject": {
+          "id": "pockets-line",
+          "type": "pocket-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "sway",
+          "effect": "mg-title"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 3.0,
+      "leadSeconds": 0.0,
+      "tailSeconds": 0.0,
+      "narration": "",
+      "startFrame": 0,
+      "durationFrames": 90,
+      "endFrame": 90,
+      "voiceStartFrame": 0,
+      "voiceFrames": 0,
+      "voice": null
+    },
+    {
+      "id": "s01-call",
+      "title": "一通電話",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "phone-call",
+          "effect": "mg-tiles"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 1.6,
+      "narration": "集團的早晨，從老闆的一通電話開始。老闆問：帳上有錢嗎？小衡看了一眼Power BI報表：有，約四點三億元。老闆說：那就好。小衡補一句：不過，有個口袋，十月十五日會先見底。電話那頭，安靜了。",
+      "voice": "audio/s01-call.wav",
+      "startFrame": 90,
+      "durationFrames": 706,
+      "endFrame": 796,
+      "voiceStartFrame": 98,
+      "voiceFrames": 650
+    },
+    {
+      "id": "s02-pockets",
+      "title": "六個口袋",
+      "visual": {
+        "subject": {
+          "id": "pockets",
+          "type": "pocket-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "pop-in",
+          "effect": "mg-split"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 6,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.45,
+      "narration": "星橋集團有六個口袋：總部、華東、華南、華北、跨境運營、香港貿易。錢不是一鍋粥，是六個口袋，各有各的脾氣。",
+      "voice": "audio/s02-pockets.wav",
+      "startFrame": 796,
+      "durationFrames": 385,
+      "endFrame": 1181,
+      "voiceStartFrame": 804,
+      "voiceFrames": 363
+    },
+    {
+      "id": "s03-safety",
+      "title": "第一站・資金安全總覽",
+      "visual": {
+        "subject": {
+          "id": "pocket-hk",
+          "type": "pocket-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "sweat",
+          "effect": "mg-chart"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 12,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第一頁，一句話判斷：總量充裕，區域性存在資金缺口。最低也有約三點六億元，是備付底線的二十九點六倍，穩得很。可是按法人和幣種分開看，香港貿易的人民幣口袋，十月十五日開始見底，缺口最大約九百零九萬元。整座水庫是滿的，偏偏有一戶的水龍頭，在咳嗽。原因是合同回款，只夠付支出的百分之十三點六。",
+      "voice": "audio/s03-safety.wav",
+      "startFrame": 1181,
+      "durationFrames": 959,
+      "endFrame": 2140,
+      "voiceStartFrame": 1189,
+      "voiceFrames": 936
+    },
+    {
+      "id": "s04-flows",
+      "title": "第二站・收支與預算",
+      "visual": {
+        "subject": {
+          "id": "yuanqi",
+          "type": "yuanqi-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "flow",
+          "effect": "mg-gauge"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第二頁看收支。淨現金流約三點七億元，全靠經營活動撐著。預算執行率百分之一百一十點五，在財務圈，這不叫超標達成，叫超支。各法人裡，香港貿易最高，一百二十六點一，這個口袋，今天特別忙。",
+      "voice": "audio/s04-flows.wav",
+      "startFrame": 2140,
+      "durationFrames": 694,
+      "endFrame": 2834,
+      "voiceStartFrame": 2148,
+      "voiceFrames": 671
+    },
+    {
+      "id": "s05-timeline",
+      "title": "第三站・渠道結算與到期",
+      "visual": {
+        "subject": {
+          "id": "yuanqi",
+          "type": "yuanqi-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "walk-slow",
+          "effect": "mg-calendar"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第三頁看時間表。未結應收約一千三百三十七萬元，逾期七十一萬元，逾期率百分之五點三，像朋友說下週還，結果慢了一點點。自家的逾期應付是零，是個準時付款的好公民。未來三十日要付約四千八百一十三萬元。",
+      "voice": "audio/s05-timeline.wav",
+      "startFrame": 2834,
+      "durationFrames": 737,
+      "endFrame": 3571,
+      "voiceStartFrame": 2842,
+      "voiceFrames": 714
+    },
+    {
+      "id": "s06-borrow",
+      "title": "第四站・融資與金融工具",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "bump-glass",
+          "effect": "mg-bank"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第四頁看借錢。貸款餘額約七千零一十七萬元，加權年利率百分之五點七三。另有可提款授信約七千七百零七萬元，但授信只是備用額度，像朋友說缺錢跟我說，心意收下，房租不能用心意付。理財可變現，是零。",
+      "voice": "audio/s06-borrow.wav",
+      "startFrame": 3571,
+      "durationFrames": 742,
+      "endFrame": 4313,
+      "voiceStartFrame": 3579,
+      "voiceFrames": 719
+    },
+    {
+      "id": "s07-pool",
+      "title": "第五站・集團資金調配",
+      "visual": {
+        "subject": {
+          "id": "yuanqi",
+          "type": "yuanqi-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "queue-walk",
+          "effect": "mg-pool"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "第五頁，是小衡最喜歡的一頁：先別急著借，看看家裡誰有餘。人民幣資金池約一點五億元，補得上香港貿易九百零九萬元的缺口，匹配後缺口是零。不過這只是候選安排，要經過審批。再熱心的口袋，也得等簽核點頭。",
+      "voice": "audio/s07-pool.wav",
+      "startFrame": 4313,
+      "durationFrames": 708,
+      "endFrame": 5021,
+      "voiceStartFrame": 4321,
+      "voiceFrames": 685
+    },
+    {
+      "id": "s08-fx",
+      "title": "第六站・跨境與匯率風險",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "stack",
+          "effect": "mg-tower"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 0.5,
+      "narration": "最後一頁看匯率。對沖前的淨敞口約一點九六億元，美元最大。做了遠期，淨敞口反而從一億九千六百一十六萬元，增加到一億九千八百二十四萬元，因為買進的方向，和原本的多頭同一邊。就像想減肥，卻多點了一份炸雞。各幣種不利變動百分之五，影響約負九百九十一萬元。",
+      "voice": "audio/s08-fx.wav",
+      "startFrame": 5021,
+      "durationFrames": 767,
+      "endFrame": 5788,
+      "voiceStartFrame": 5029,
+      "voiceFrames": 744
+    },
+    {
+      "id": "s09-evening",
+      "title": "傍晚",
+      "visual": {
+        "subject": {
+          "id": "xiaoheng",
+          "type": "finance-lead-rig"
+        },
+        "style": "flat",
+        "motion": {
+          "action": "stitch",
+          "effect": "mg-endcard"
+        },
+        "renderer": "canvas2d"
+      },
+      "visualSeconds": 10,
+      "leadSeconds": 0.25,
+      "tailSeconds": 3.2,
+      "narration": "傍晚，老闆又打來：所以，我們到底有沒有錢？小衡笑了：有。好的資金分析，不是告訴你還剩多少，而是告訴你，接下來該做什麼安排。至少這一晚，小衡知道該去敲哪一扇門，而那個口袋，還來得及補回元氣。",
+      "voice": "audio/s09-evening.wav",
+      "startFrame": 5788,
+      "durationFrames": 697,
+      "endFrame": 6485,
+      "voiceStartFrame": 5796,
+      "voiceFrames": 593
+    }
+  ],
+  "captions": [
+    {
+      "text": "集團的早晨，",
+      "startFrame": 98,
+      "endFrame": 139
+    },
+    {
+      "text": "從老闆的一通電話開始。",
+      "startFrame": 139,
+      "endFrame": 216
+    },
+    {
+      "text": "老闆問：帳上有錢嗎？",
+      "startFrame": 216,
+      "endFrame": 285
+    },
+    {
+      "text": "小衡看了一眼Power BI報表：有，",
+      "startFrame": 285,
+      "endFrame": 416
+    },
+    {
+      "text": "約四點三億元。",
+      "startFrame": 416,
+      "endFrame": 464
+    },
+    {
+      "text": "老闆說：那就好。",
+      "startFrame": 464,
+      "endFrame": 520
+    },
+    {
+      "text": "小衡補一句：不過，",
+      "startFrame": 520,
+      "endFrame": 582
+    },
+    {
+      "text": "有個口袋，",
+      "startFrame": 582,
+      "endFrame": 617
+    },
+    {
+      "text": "十月十五日會先見底。",
+      "startFrame": 617,
+      "endFrame": 686
+    },
+    {
+      "text": "電話那頭，",
+      "startFrame": 686,
+      "endFrame": 720
+    },
+    {
+      "text": "安靜了。",
+      "startFrame": 720,
+      "endFrame": 748
+    },
+    {
+      "text": "星橋集團有六個口袋：總部、華東、華南、華北、",
+      "startFrame": 804,
+      "endFrame": 958
+    },
+    {
+      "text": "跨境運營、香港貿易。",
+      "startFrame": 958,
+      "endFrame": 1027
+    },
+    {
+      "text": "錢不是一鍋粥，",
+      "startFrame": 1027,
+      "endFrame": 1076
+    },
+    {
+      "text": "是六個口袋，",
+      "startFrame": 1076,
+      "endFrame": 1118
+    },
+    {
+      "text": "各有各的脾氣。",
+      "startFrame": 1118,
+      "endFrame": 1167
+    },
+    {
+      "text": "第一頁，",
+      "startFrame": 1189,
+      "endFrame": 1215
+    },
+    {
+      "text": "一句話判斷：總量充裕，",
+      "startFrame": 1215,
+      "endFrame": 1288
+    },
+    {
+      "text": "區域性存在資金缺口。",
+      "startFrame": 1288,
+      "endFrame": 1354
+    },
+    {
+      "text": "最低也有約三點六億元，",
+      "startFrame": 1354,
+      "endFrame": 1426
+    },
+    {
+      "text": "是備付底線的二十九點六倍，",
+      "startFrame": 1426,
+      "endFrame": 1512
+    },
+    {
+      "text": "穩得很。",
+      "startFrame": 1512,
+      "endFrame": 1538
+    },
+    {
+      "text": "可是按法人和幣種分開看，",
+      "startFrame": 1538,
+      "endFrame": 1617
+    },
+    {
+      "text": "香港貿易的人民幣口袋，",
+      "startFrame": 1617,
+      "endFrame": 1690
+    },
+    {
+      "text": "十月十五日開始見底，",
+      "startFrame": 1690,
+      "endFrame": 1756
+    },
+    {
+      "text": "缺口最大約九百零九萬元。",
+      "startFrame": 1756,
+      "endFrame": 1835
+    },
+    {
+      "text": "整座水庫是滿的，",
+      "startFrame": 1835,
+      "endFrame": 1888
+    },
+    {
+      "text": "偏偏有一戶的水龍頭，",
+      "startFrame": 1888,
+      "endFrame": 1954
+    },
+    {
+      "text": "在咳嗽。",
+      "startFrame": 1954,
+      "endFrame": 1980
+    },
+    {
+      "text": "原因是合同回款，",
+      "startFrame": 1980,
+      "endFrame": 2033
+    },
+    {
+      "text": "只夠付支出的百分之十三點六。",
+      "startFrame": 2033,
+      "endFrame": 2125
+    },
+    {
+      "text": "第二頁看收支。",
+      "startFrame": 2148,
+      "endFrame": 2200
+    },
+    {
+      "text": "淨現金流約三點七億元，",
+      "startFrame": 2200,
+      "endFrame": 2282
+    },
+    {
+      "text": "全靠經營活動撐著。",
+      "startFrame": 2282,
+      "endFrame": 2349
+    },
+    {
+      "text": "預算執行率百分之一百一十點五，",
+      "startFrame": 2349,
+      "endFrame": 2461
+    },
+    {
+      "text": "在財務圈，",
+      "startFrame": 2461,
+      "endFrame": 2498
+    },
+    {
+      "text": "這不叫超標達成，",
+      "startFrame": 2498,
+      "endFrame": 2558
+    },
+    {
+      "text": "叫超支。",
+      "startFrame": 2558,
+      "endFrame": 2588
+    },
+    {
+      "text": "各法人裡，",
+      "startFrame": 2588,
+      "endFrame": 2625
+    },
+    {
+      "text": "香港貿易最高，",
+      "startFrame": 2625,
+      "endFrame": 2677
+    },
+    {
+      "text": "一百二十六點一，",
+      "startFrame": 2677,
+      "endFrame": 2737
+    },
+    {
+      "text": "這個口袋，",
+      "startFrame": 2737,
+      "endFrame": 2774
+    },
+    {
+      "text": "今天特別忙。",
+      "startFrame": 2774,
+      "endFrame": 2819
+    },
+    {
+      "text": "第三頁看時間表。",
+      "startFrame": 2842,
+      "endFrame": 2902
+    },
+    {
+      "text": "未結應收約一千三百三十七萬元，",
+      "startFrame": 2902,
+      "endFrame": 3013
+    },
+    {
+      "text": "逾期七十一萬元，",
+      "startFrame": 3013,
+      "endFrame": 3073
+    },
+    {
+      "text": "逾期率百分之五點三，",
+      "startFrame": 3073,
+      "endFrame": 3147
+    },
+    {
+      "text": "像朋友說下週還，",
+      "startFrame": 3147,
+      "endFrame": 3206
+    },
+    {
+      "text": "結果慢了一點點。",
+      "startFrame": 3206,
+      "endFrame": 3266
+    },
+    {
+      "text": "自家的逾期應付是零，",
+      "startFrame": 3266,
+      "endFrame": 3340
+    },
+    {
+      "text": "是個準時付款的好公民。",
+      "startFrame": 3340,
+      "endFrame": 3422
+    },
+    {
+      "text": "未來三十日要付約四千八百一十三萬元。",
+      "startFrame": 3422,
+      "endFrame": 3556
+    },
+    {
+      "text": "第四頁看借錢。",
+      "startFrame": 3579,
+      "endFrame": 3633
+    },
+    {
+      "text": "貸款餘額約七千零一十七萬元，",
+      "startFrame": 3633,
+      "endFrame": 3740
+    },
+    {
+      "text": "加權年利率百分之五點七三。",
+      "startFrame": 3740,
+      "endFrame": 3839
+    },
+    {
+      "text": "另有可提款授信約七千七百零七萬元，",
+      "startFrame": 3839,
+      "endFrame": 3969
+    },
+    {
+      "text": "但授信只是備用額度，",
+      "startFrame": 3969,
+      "endFrame": 4046
+    },
+    {
+      "text": "像朋友說缺錢跟我說，",
+      "startFrame": 4046,
+      "endFrame": 4122
+    },
+    {
+      "text": "心意收下，",
+      "startFrame": 4122,
+      "endFrame": 4160
+    },
+    {
+      "text": "房租不能用心意付。",
+      "startFrame": 4160,
+      "endFrame": 4229
+    },
+    {
+      "text": "理財可變現，",
+      "startFrame": 4229,
+      "endFrame": 4275
+    },
+    {
+      "text": "是零。",
+      "startFrame": 4275,
+      "endFrame": 4298
+    },
+    {
+      "text": "第五頁，",
+      "startFrame": 4321,
+      "endFrame": 4349
+    },
+    {
+      "text": "是小衡最喜歡的一頁：先別急著借，",
+      "startFrame": 4349,
+      "endFrame": 4462
+    },
+    {
+      "text": "看看家裡誰有餘。",
+      "startFrame": 4462,
+      "endFrame": 4519
+    },
+    {
+      "text": "人民幣資金池約一點五億元，",
+      "startFrame": 4519,
+      "endFrame": 4611
+    },
+    {
+      "text": "補得上香港貿易九百零九萬元的缺口，",
+      "startFrame": 4611,
+      "endFrame": 4731
+    },
+    {
+      "text": "匹配後缺口是零。",
+      "startFrame": 4731,
+      "endFrame": 4787
+    },
+    {
+      "text": "不過這只是候選安排，",
+      "startFrame": 4787,
+      "endFrame": 4858
+    },
+    {
+      "text": "要經過審批。",
+      "startFrame": 4858,
+      "endFrame": 4900
+    },
+    {
+      "text": "再熱心的口袋，",
+      "startFrame": 4900,
+      "endFrame": 4950
+    },
+    {
+      "text": "也得等簽核點頭。",
+      "startFrame": 4950,
+      "endFrame": 5006
+    },
+    {
+      "text": "最後一頁看匯率。",
+      "startFrame": 5029,
+      "endFrame": 5077
+    },
+    {
+      "text": "對沖前的淨敞口約一點九六億元，",
+      "startFrame": 5077,
+      "endFrame": 5168
+    },
+    {
+      "text": "美元最大。",
+      "startFrame": 5168,
+      "endFrame": 5198
+    },
+    {
+      "text": "做了遠期，",
+      "startFrame": 5198,
+      "endFrame": 5229
+    },
+    {
+      "text": "淨敞口反而從一億九千六百一十六萬元，",
+      "startFrame": 5229,
+      "endFrame": 5337
+    },
+    {
+      "text": "增加到一億九千八百二十四萬元，",
+      "startFrame": 5337,
+      "endFrame": 5428
+    },
+    {
+      "text": "因為買進的方向，",
+      "startFrame": 5428,
+      "endFrame": 5477
+    },
+    {
+      "text": "和原本的多頭同一邊。",
+      "startFrame": 5477,
+      "endFrame": 5537
+    },
+    {
+      "text": "就像想減肥，",
+      "startFrame": 5537,
+      "endFrame": 5573
+    },
+    {
+      "text": "卻多點了一份炸雞。",
+      "startFrame": 5573,
+      "endFrame": 5628
+    },
+    {
+      "text": "各幣種不利變動百分之五，",
+      "startFrame": 5628,
+      "endFrame": 5700
+    },
+    {
+      "text": "影響約負九百九十一萬元。",
+      "startFrame": 5700,
+      "endFrame": 5773
+    },
+    {
+      "text": "傍晚，",
+      "startFrame": 5796,
+      "endFrame": 5815
+    },
+    {
+      "text": "老闆又打來：所以，",
+      "startFrame": 5815,
+      "endFrame": 5872
+    },
+    {
+      "text": "我們到底有沒有錢？",
+      "startFrame": 5872,
+      "endFrame": 5928
+    },
+    {
+      "text": "小衡笑了：有。",
+      "startFrame": 5928,
+      "endFrame": 5973
+    },
+    {
+      "text": "好的資金分析，",
+      "startFrame": 5973,
+      "endFrame": 6017
+    },
+    {
+      "text": "不是告訴你還剩多少，",
+      "startFrame": 6017,
+      "endFrame": 6080
+    },
+    {
+      "text": "而是告訴你，",
+      "startFrame": 6080,
+      "endFrame": 6118
+    },
+    {
+      "text": "接下來該做什麼安排。",
+      "startFrame": 6118,
+      "endFrame": 6181
+    },
+    {
+      "text": "至少這一晚，",
+      "startFrame": 6181,
+      "endFrame": 6219
+    },
+    {
+      "text": "小衡知道該去敲哪一扇門，",
+      "startFrame": 6219,
+      "endFrame": 6294
+    },
+    {
+      "text": "而那個口袋，",
+      "startFrame": 6294,
+      "endFrame": 6332
+    },
+    {
+      "text": "還來得及補回元氣。",
+      "startFrame": 6332,
+      "endFrame": 6389
+    }
+  ],
+  "captionTiming": "character-weighted-approximation",
+  "audioTracks": [
+    {
+      "file": "audio/music.wav",
+      "startSeconds": 0,
+      "gain": 1.0
+    },
+    {
+      "file": "audio/sfx.wav",
+      "startSeconds": 0,
+      "gain": 1.0
+    }
+  ]
+}

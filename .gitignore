@@ -6,6 +6,7 @@ film/mix_raw.wav
 film/music_only.wav
 film/vo44/
 powerbi-capital-explainer/film.mp4
+powerbi-capital-explainer/story.mp4
 
 # 部署與暫存
 .vercel
@@ -23,3 +24,12 @@ film/qa_times.txt
 film/qa2_times.txt
 film/qa2_map.json
 qa_page/
+
+# 動畫專案的暫存與大檔（可由 animation/tools 重現）
+animation/node_modules/
+animation/audio/
+animation/preview/
+animation/*.mp4
+animation/render*.log
+animation/tts.log
+animation/npm_install.log

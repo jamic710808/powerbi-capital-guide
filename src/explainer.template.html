@@ -43,6 +43,13 @@ h2 small{display:inline-block;font-size:15px;font-weight:700;color:#fff;backgrou
 /* video */
 .vid{padding:10px}
 .vid video{display:block;width:100%;border-radius:12px;background:#000;aspect-ratio:16/9}
+.vids{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.vcol{min-width:0}
+.vcol h3{font-size:20px;margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vcol h3 em{font-style:normal;font-size:13px;font-weight:700;color:var(--teal);border:1px solid var(--teal);border-radius:12px;padding:1px 10px}
+.vcol .vdesc{color:var(--mut);font-size:15px;margin-bottom:10px;min-height:3.2em}
+@media(max-width:900px){.vcol .vdesc{min-height:0}}
+@media(max-width:900px){.vids{grid-template-columns:1fr}}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:5px 12px;font-size:14px;font-weight:700}
 .chip:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
@@ -189,11 +196,23 @@ footer{padding:50px 0 70px;color:var(--mut);font-size:14px}
 
 <!-- FILM -->
 <section id="film">
- <h2><small>▶</small>影片　6 分鐘看完整份報告</h2>
- <p class="lead">旁白＋字幕。沒時間往下捲的話，先看這支。點下面的章節可以直接跳。</p>
- <div class="card vid"><video id="vid" controls preload="metadata" playsinline poster="poster.jpg"><source src="film.mp4" type="video/mp4">你的瀏覽器不支援影片播放。</video></div>
- <div class="chips" id="chips"></div>
- <p class="hint">旁白：Gemini TTS（Kore）；配樂為程式合成的柔和鋼琴與音墊。旁白發音若有誤讀，以畫面字幕為準。</p>
+ <h2><small>▶</small>影片　兩種方式看完整份報告</h2>
+ <p class="lead">左邊是旁白導覽，一頁一頁看畫面；右邊是故事動畫，用一個口袋冒汗的故事講同一份報告。想看哪支都行，點下面的章節可以直接跳。</p>
+ <div class="vids">
+  <div class="vcol">
+   <h3>導覽影片 <em>約 6 分鐘</em></h3>
+   <p class="vdesc">旁白＋字幕，直接看報告畫面，講清楚每一頁在回答什麼。</p>
+   <div class="card vid"><video id="vid" controls preload="metadata" playsinline poster="poster.jpg"><source src="film.mp4" type="video/mp4">你的瀏覽器不支援影片播放。</video></div>
+   <div class="chips" id="chips"></div>
+  </div>
+  <div class="vcol">
+   <h3>故事動畫《有個口袋在冒汗》 <em>約 3 分半</em></h3>
+   <p class="vdesc">小衡、元氣小隊和六個口袋，從老闆的一通電話，走完六站。畫面為示意，數字取自同一份報告。</p>
+   <div class="card vid"><video id="vid2" controls preload="metadata" playsinline poster="story_poster.jpg"><source src="story.mp4" type="video/mp4">你的瀏覽器不支援影片播放。</video></div>
+   <div class="chips" id="chips2"></div>
+  </div>
+ </div>
+ <p class="hint">旁白皆為 Gemini TTS（Kore）；配樂為程式合成。旁白發音若有誤讀，以畫面字幕為準。動畫為示意畫面，不是報告截圖；候選安排（如資金池匹配）需經審批，不代表已執行。</p>
 </section>
 
 <!-- LAYERS -->
@@ -353,8 +372,13 @@ const secs=$$('section');const nio=new IntersectionObserver(es=>es.forEach(e=>{i
 /* film chapters（秒數由 build_explainer.py 依 timeline.json 各場景起點產生，不手填） */
 const CH=/*CH*/[];
 const fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
-$('#chips').innerHTML=CH.map(c=>`<button class="chip" data-t="${c[1]}"><small>${fmt(c[1])}</small>${c[0]}</button>`).join('');
-$$('.chip').forEach(b=>b.onclick=()=>{const v=$('#vid');v.currentTime=+b.dataset.t;v.play().catch(()=>{});v.scrollIntoView({block:'center',behavior:'smooth'})});
+const CH2=/*CH2*/[];
+const chipHTML=(a,id)=>a.map(c=>`<button class="chip" data-v="${id}" data-t="${c[1]}"><small>${fmt(c[1])}</small>${c[0]}</button>`).join('');
+$('#chips').innerHTML=chipHTML(CH,'vid');
+$('#chips2').innerHTML=chipHTML(CH2,'vid2');
+$$('.chip').forEach(b=>b.onclick=()=>{const v=$('#'+b.dataset.v);v.currentTime=+b.dataset.t;v.play().catch(()=>{});v.scrollIntoView({block:'center',behavior:'smooth'})});
+/* 兩支影片不同時播放 */
+['vid','vid2'].forEach(id=>{const v=$('#'+id);v.addEventListener('play',()=>{['vid','vid2'].forEach(o=>{if(o!==id)$('#'+o).pause()})})});
 
 /* layers */
 const LAYER=[

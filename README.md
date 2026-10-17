@@ -1,6 +1,6 @@
 # Power BI 資金分析報告 · 圖解導覽
 
-給「完全不懂 Power BI、也不熟資金管理」的人看的導覽：一支 **6 分 03 秒旁白影片** ＋ 一個 **零基礎互動圖解頁**，把一份集團資金分析報告（7 頁）拆開來講。
+給「完全不懂 Power BI、也不熟資金管理」的人看的導覽：一支 **6 分 03 秒旁白導覽影片**、一支 **3 分 36 秒故事動畫《有個口袋在冒汗》**，加上一個 **零基礎互動圖解頁**（兩支影片並列嵌在頁內），把一份集團資金分析報告（7 頁）拆開來講。
 
 > 資料為**示範（模擬）資料**，不代表任何真實公司。畫面擷取自線上 Power BI 報告（Publish to web，2026-10-12），資料截止日 2026-10-05。
 
@@ -11,7 +11,7 @@
 | Vercel | https://powerbi-capital-explainer.vercel.app | 影片載入最快，建議對外分享用這個 |
 | GitHub Pages | https://jamic710808.github.io/powerbi-capital-guide/ | 來源是 `gh-pages` 分支 |
 
-互動頁是單檔（圖片內嵌），含：影片章節跳轉、三層架構、六個問題、一筆數字的資料旅程、星狀模型（點節點亮起關聯）、七頁熱點說明、口徑翻牌（真實 DAX）、小字典，以及「已確認事實」與「觀察／待確認」兩欄。
+互動頁是單檔（圖片內嵌），含：兩支影片並列（各自章節跳轉、不會同時播放）、三層架構、六個問題、一筆數字的資料旅程、星狀模型（點節點亮起關聯）、七頁熱點說明、口徑翻牌（真實 DAX）、小字典，以及「已確認事實」與「觀察／待確認」兩欄。
 
 ## 報告在回答什麼
 
@@ -53,14 +53,15 @@ film/
   mkaudio.py             程式合成配樂與轉場音效、混音
   verify_audio.py        旁白是否落在時間窗口內
   print_clauses.py       印出每場景的句界（鏡頭／聚光框以句序對時）
-powerbi-capital-explainer/    部署用：index.html、poster.jpg（film.mp4 見下）
+animation/               故事動畫《有個口袋在冒汗》：腳本、分鏡、場景原始碼、配音／配樂／算圖工具（不含音檔與成片，見 animation/review.md）
+powerbi-capital-explainer/    部署用：index.html、poster.jpg、story_poster.jpg（film.mp4、story.mp4 見下）
 qa_*.js  probe.js        頁面與線上版的檢查腳本
 ```
 
 ## 分支說明
 
-- `main`：研究與製作紀錄（本分支）。**不含 `film.mp4`**（74 MB），避免影片進歷史。
-- `gh-pages`：網站三個檔案（`index.html`、`film.mp4`、`poster.jpg`）＋ `.nojekyll`，GitHub Pages 由此發佈。
+- `main`：研究與製作紀錄（本分支）。**不含 `film.mp4`**（74 MB）與 `story.mp4`（17 MB），避免影片進歷史。
+- `gh-pages`：網站五個檔案（`index.html`、`film.mp4`、`poster.jpg`、`story.mp4`、`story_poster.jpg`）＋ `.nojekyll`，GitHub Pages 由此發佈。
 - 也沒有提交：母檔 `out_final.mp4`（148 MB）、`mix*.wav`、`vo44/`、QA 畫格——都可由腳本重現。
 
 ## 重新製作
@@ -82,7 +83,26 @@ node render.js . 0 362.666 out_final.mp4       # 8. 渲染（約 17 分鐘；總
 cd .. && python build_explainer.py powerbi-capital-explainer/index.html   # 9. 建頁
 ```
 
+### 故事動畫（animation/）
+
+風格：扁平插畫＋動態圖形，Canvas 2D 逐幀繪製；角色為小衡（財務主管）、元氣小隊、六個口袋；旁白 Gemini TTS（Kore），配樂與音效為程式合成。腳本與分鏡見 `animation/script.md`、`animation/storyboard.md`，檢查層級與限制見 `animation/review.md`。需要 Node 22、Playwright、Python（numpy）、ffmpeg、系統 Chrome、`GEMINI_API_KEY`。
+
+```bash
+cd animation && npm install
+export PYTHON="$(which python)" CHROME_PATH="<chrome.exe 路徑>" PYTHONIOENCODING=utf-8
+python tools/gen_voice.py                       # 旁白 → audio/（需 GEMINI_API_KEY）
+python tools/pipeline.py timeline . --lock      # 依旁白實際長度鎖定時間軸
+python tools/make_audio.py                      # 配樂＋音效
+python tools/pipeline.py mix .
+node tools/render.cjs . --render                # 約 14 分鐘
+python tools/pipeline.py finish . && python tools/pipeline.py validate .
+```
+
+影片網頁版：`ffmpeg -i final.mp4 -c copy -movflags +faststart story.mp4`。頁面章節秒數由 `animation/timeline.json` 產生（`build_explainer.py`）。
+
 ## 已知限制
+
+- 故事動畫的旁白同樣**沒有經過人工聆聽**，字幕與音效時間點依字數估算（非逐字對齊）；動畫為示意畫面，非報告截圖；資金池匹配為候選安排，片中已註明須審批。
 
 - **沒有做獨立評審**（只做自查：抽幀、接縫、量測、數字對 DAX）。
 - **旁白沒有經過人工聆聽**，數字讀法請自行確認。
