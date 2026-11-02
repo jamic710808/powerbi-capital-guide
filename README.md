@@ -11,6 +11,8 @@
 | Vercel | https://powerbi-capital-explainer.vercel.app | 影片載入最快，建議對外分享用這個 |
 | GitHub Pages | https://jamic710808.github.io/powerbi-capital-guide/ | 來源是 `gh-pages` 分支 |
 
+另有 **技術圖解頁**（`tech.html`，網址 `/tech.html`）：用大量圖與互動，講這個專案從讀模型、抓畫面、互動頁、導覽影片、故事動畫到上線的完整過程與工具；互動頁有三個入口（導覽列、影片區橫幅、線上報告旁按鈕）可進入。
+
 互動頁是單檔（圖片內嵌），含：兩支影片並列（各自章節跳轉、不會同時播放）、三層架構、六個問題、一筆數字的資料旅程、星狀模型（點節點亮起關聯）、七頁熱點說明、口徑翻牌（真實 DAX）、小字典，以及「已確認事實」與「觀察／待確認」兩欄。
 
 ## 報告在回答什麼
@@ -42,6 +44,7 @@ shoot.js                 線上報告 → 逐頁 3840×2160 擷取（shots/）
 make_assets.py           shots/ → assets/（3840／1920／960 三種尺寸）
 src/explainer.template.html   互動頁範本
 build_explainer.py       範本＋圖片＋時間軸 → 單檔 index.html（章節秒數取自 timeline.json）
+src/pipeline_explainer.template.html、build_pipeline_explainer.py   技術圖解頁範本與建置腳本 → tech.html
 film/
   BRIEF.md  GAUNTLET.md  簡報（事實、不可宣稱）與製作／驗證紀錄
   narration.json         旁白稿（一句＝一個畫面任務）

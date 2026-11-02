@@ -33,3 +33,8 @@ animation/*.mp4
 animation/render*.log
 animation/tts.log
 animation/npm_install.log
+
+# 預覽用（含大影片與截圖），不進版控
+preview_site/
+preview_shots/
+vercel_deploy.log

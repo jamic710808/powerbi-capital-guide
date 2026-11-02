@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一份報告，怎麼長成網頁＋影片＋動畫？｜資金分析報告專案全流程</title>
+<meta name="description" content="零基礎看懂「Power BI 資金分析報告」專案實際走過的過程：從讀模型、抓畫面，到互動頁、導覽影片、故事動畫與上線，每個工具與程式碼怎麼被呼叫、何時用、產出什麼。">
+<style>
+:root{--bg:#f3f7f8;--card:#fff;--ink:#0c2a3a;--mut:#58727f;--line:#d6e2e7;--teal:#13788a;--teal2:#1fa3b8;--green:#2a9d7c;--orange:#e9792f;--purple:#7a5af8;--pink:#d6457f;--blue:#2f6fe0;--sh:0 8px 26px rgba(12,42,58,.10);--r:18px;--code:#0f2330;--codeink:#d8eef4}
+@media(prefers-color-scheme:dark){:root{--bg:#08171f;--card:#102633;--ink:#e4f2f5;--mut:#9bb8c3;--line:#21475a;--sh:0 8px 26px rgba(0,0,0,.45);--code:#06121a}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:"Microsoft JhengHei","Noto Sans TC","PingFang TC",system-ui,sans-serif;line-height:1.65}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:4px;align-items:center;overflow-x:auto;padding:9px 20px;white-space:nowrap}
+nav b{color:var(--teal);margin-right:8px}
+nav a{padding:5px 11px;border-radius:18px;text-decoration:none;font-size:14px;color:var(--mut)}
+nav a:hover,nav a.on{background:var(--teal);color:#fff}
+section{padding:64px 0 6px;scroll-margin-top:44px}
+h2{font-size:clamp(26px,4vw,34px);margin-bottom:6px;letter-spacing:.02em}
+h2 small{display:inline-block;font-size:14px;font-weight:700;color:#fff;background:var(--orange);padding:2px 12px;border-radius:14px;margin-right:10px;vertical-align:middle}
+.lead{color:var(--mut);font-size:17px;margin-bottom:22px;max-width:60em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.pad{padding:20px}
+.tag{display:inline-block;font-size:12px;font-weight:800;color:#fff;padding:2px 10px;border-radius:12px;margin-right:6px;vertical-align:middle}
+.tA{background:var(--teal)}.tB{background:var(--green)}.tC{background:var(--orange)}.tD{background:var(--purple)}.tE{background:var(--pink)}.tF{background:var(--blue)}
+.hint{color:var(--mut);font-size:14px;margin-top:10px}
+img.shot{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+svg text{font-family:inherit}
+.svgbox{width:100%;height:auto;display:block}
+.k{background:color-mix(in srgb,var(--teal) 14%,transparent);border-radius:6px;padding:0 6px;font-weight:700}
+/* hero */
+.hero{padding:42px 0 10px}
+.hero h1{font-size:clamp(32px,5.4vw,54px);line-height:1.15;margin-bottom:12px}
+.hero h1 span{color:var(--teal2)}
+.hero p.lead{font-size:19px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:22px 0}
+.stat{padding:14px 16px}
+.stat b{display:block;font-size:30px;color:var(--teal);font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--mut)}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.trio figure{overflow:hidden}
+.trio figcaption{padding:10px 14px 14px}
+.trio figcaption b{display:block}
+.trio figcaption span{font-size:14px;color:var(--mut)}
+/* stage map */
+.stages{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px}
+.stbtn{border:2px solid var(--line);background:var(--card);border-radius:14px;padding:12px 8px;text-align:center;transition:.2s}
+.stbtn:hover{transform:translateY(-2px)}
+.stbtn[aria-pressed=true]{border-color:var(--orange);box-shadow:var(--sh)}
+.stbtn .n{font-size:12px;font-weight:800;color:#fff;border-radius:10px;padding:1px 9px;display:inline-block}
+.stbtn .e{font-size:30px;line-height:1.3}
+.stbtn .t{font-weight:800;font-size:15px}
+.spanel{display:none}.spanel.on{display:block}
+.io{display:grid;grid-template-columns:1fr auto 1.2fr auto 1fr;gap:10px;align-items:stretch;margin:14px 0}
+.io>div{padding:14px;border-radius:14px;border:1px dashed var(--line);background:color-mix(in srgb,var(--card) 70%,var(--bg))}
+.io .mid{border-style:solid;border-color:var(--teal);background:color-mix(in srgb,var(--teal) 8%,var(--card))}
+.io h4{font-size:13px;color:var(--mut);margin-bottom:4px}
+.io li{margin-left:1.1em;font-size:15px}
+.io .ar{display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:26px;border:none;background:none;padding:0}
+.strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}.strip figcaption{font-size:12px;color:var(--mut);text-align:center;margin-top:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:3px 12px;font-size:14px;font-weight:700}
+button.pill:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tl .ev{padding:14px 16px;position:relative}
+.tl .ev i{font-style:normal;position:absolute;top:-12px;left:14px;background:var(--orange);color:#fff;font-weight:800;border-radius:12px;padding:0 10px;font-size:13px}
+.tl .ev b{display:block;margin-top:4px}
+.tl .ev span{font-size:14px;color:var(--mut)}
+.tl .ev em{font-style:normal;display:block;font-size:13px;color:var(--teal);margin-top:4px}
+/* model */
+.layers{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
+.layer{padding:18px;text-align:center}
+.layer .big{font-size:44px;font-weight:800;color:var(--teal2)}
+.layer .ic{font-size:36px}
+.layers .ar{color:var(--orange);font-size:28px}
+.facts,.dims{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.fb{border:2px solid var(--orange);background:color-mix(in srgb,var(--orange) 12%,var(--card));border-radius:12px;padding:5px 12px;font-weight:700;font-size:14px}
+.fb[aria-pressed=true]{background:var(--orange);color:#fff}
+.db{border:2px solid var(--line);background:var(--card);border-radius:12px;padding:5px 12px;font-size:14px;transition:.25s}
+.db.hit{border-color:var(--green);background:color-mix(in srgb,var(--green) 22%,var(--card));font-weight:800;transform:translateY(-3px)}
+.db.off{opacity:.38}
+.wf{display:flex;align-items:flex-end;gap:10px;height:190px;margin:10px 0}
+.wf div{flex:1;border-radius:10px 10px 0 0;position:relative;min-width:0;transition:height .6s}
+@keyframes grow{from{transform:scaleY(0)}}
+.wf div{transform-origin:bottom;animation:grow .7s ease-out}
+.wf div b{position:absolute;top:-24px;left:0;right:0;text-align:center;font-size:14px}
+.wf div span{position:absolute;bottom:-26px;left:0;right:0;text-align:center;font-size:12px;color:var(--mut)}
+.pg{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.pg button{border:2px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card);padding:0}
+.pg button[aria-pressed=true]{border-color:var(--orange)}
+.pg img{display:block;width:100%}
+.pg span{display:block;font-size:12px;padding:3px}
+/* tools */
+.tbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.tb{border:2px solid var(--line);background:var(--card);border-radius:14px;padding:6px 12px;font-size:14px;font-weight:700}
+.tb[aria-pressed=true]{border-color:var(--orange);box-shadow:var(--sh)}
+.tool h3{font-size:24px;margin-bottom:2px}
+.five{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+.five>div{padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--teal) 6%,var(--card));border:1px solid var(--line)}
+.five h4{font-size:13px;color:var(--teal);margin-bottom:2px}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}
+.flow span{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:2px 10px;font-size:14px}
+.flow i{font-style:normal;color:var(--orange)}
+pre{background:var(--code);color:var(--codeink);border-radius:12px;padding:12px 14px;overflow-x:auto;font:13px/1.55 Consolas,"Cascadia Mono",monospace;margin-top:10px;white-space:pre}
+pre .c{color:#7fb3c2}
+/* stepper */
+.stp{display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start}
+.steps{display:flex;flex-direction:column;gap:6px}
+.step{text-align:left;border:2px solid var(--line);background:var(--card);border-radius:12px;padding:7px 12px;font-size:14px;transition:.2s}
+.step b{color:var(--orange);margin-right:6px}
+.step.on{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 10%,var(--card));font-weight:700}
+.step.done{opacity:.6}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.btn{border:1px solid var(--teal);background:var(--card);color:var(--teal);border-radius:20px;padding:5px 14px;font-weight:700;font-size:14px}
+.btn:hover{background:var(--teal);color:#fff}
+.io2{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:10px}
+.io2>div{border:1px dashed var(--line);border-radius:12px;padding:10px;font-size:14px}
+.io2 .ar{border:none;color:var(--orange);font-size:24px;padding:0}
+/* demo */
+.demo{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}
+canvas{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);background:#fff;display:block}
+input[type=range]{width:100%;accent-color:var(--orange)}
+.fp{font-family:Consolas,monospace;background:var(--code);color:var(--codeink);border-radius:8px;padding:2px 8px}
+.bar{height:26px;border-radius:13px;background:var(--line);position:relative;overflow:hidden;margin:8px 0}
+.bar i{position:absolute;top:0;bottom:0;left:0;border-radius:13px}
+/* compare */
+.cmp{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden}
+.cmp th,.cmp td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:15px;vertical-align:top}
+.cmp th{background:color-mix(in srgb,var(--teal) 10%,var(--card));font-size:14px}
+.cmp td:first-child{font-weight:800;color:var(--teal);white-space:nowrap}
+/* decide */
+.dec{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.dec>div{padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+.dec .q{font-weight:800}
+.dec .a{font-size:14px;color:var(--mut)}
+.dec .e{font-size:30px}
+/* glossary */
+.gs{width:100%;border:2px solid var(--line);border-radius:14px;padding:10px 16px;font:inherit;background:var(--card);color:var(--ink);margin-bottom:12px}
+.gl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gl>div{padding:10px 14px}
+.gl b{display:block;color:var(--teal)}
+.gl span{font-size:14px;color:var(--mut)}
+.pit{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pit>div{padding:12px 16px;border-left:5px solid var(--orange)}
+.pit b{display:block}
+.pit span{font-size:14px;color:var(--mut)}
+.lim{border-left-color:var(--pink)!important}
+footer{padding:40px 0 60px;color:var(--mut);font-size:14px}
+.reveal{opacity:0;transform:translateY(14px);transition:.6s}
+.reveal.in{opacity:1;transform:none}
+@media(max-width:900px){
+ .stats{grid-template-columns:repeat(2,1fr)}.trio,.tl,.gl,.pit,.dec,.five,.two,.demo,.stp{grid-template-columns:1fr}
+ .stages{grid-template-columns:repeat(3,1fr)}.strip{grid-template-columns:repeat(2,1fr)}.io{grid-template-columns:1fr}.io .ar{transform:rotate(90deg)}
+ .layers{grid-template-columns:1fr}.layers .ar{transform:rotate(90deg);text-align:center}.pg{grid-template-columns:repeat(4,1fr)}
+ .steps{flex-direction:row;flex-wrap:wrap}
+}
+</style>
+</head>
+<body id="top">
+<nav><div class="wrap"><a href="index.html" style="background:var(--orange);color:#fff;font-weight:700">← 圖解導覽</a><b style="margin-left:8px">資金分析專案</b><a href="#map">全局地圖</a><a href="#time">時間線</a><a href="#model">Power BI</a><a href="#tools">工具箱</a><a href="#code">程式碼怎麼跑</a><a href="#cmp">兩條管線</a><a href="#ship">產出與上線</a><a href="#use">何時用哪個</a><a href="#dict">名詞字典</a><a href="#pit">踩坑與限制</a></div></nav>
+
+<main class="wrap">
+<!-- HERO -->
+<header class="hero">
+ <h1>一份報告，<br>怎麼長成<span>網頁＋影片＋動畫</span>？</h1>
+ <p class="lead">這是「Power BI 資金分析報告」專案實際走過的過程。你不用懂技術：先看圖，再點、再拖。每個工具都回答五件事——<b>是什麼、何時用、用在哪、怎麼跑、產出什麼</b>。</p>
+ <div class="stats">
+  <div class="stat card"><b>7</b><span>頁報告（首頁＋6 張內頁）</span></div>
+  <div class="stat card"><b>151</b><span>個 DAX 度量值（數字的公式）</span></div>
+  <div class="stat card"><b>1</b><span>個互動圖解頁（單一 HTML 檔）</span></div>
+  <div class="stat card"><b>2</b><span>支影片：導覽 6:03、動畫 3:36</span></div>
+  <div class="stat card"><b>3</b><span>個網址：Vercel、Pages、GitHub</span></div>
+ </div>
+ <div class="trio">
+  <figure class="card"><img class="shot" alt="導覽影片海報：資金分析報告 Power BI 7 張頁面" src="{{IMG:guide_poster}}"><figcaption><b>導覽影片（約 6 分）</b><span>直接看報告畫面，旁白講清楚每頁回答什麼。</span></figcaption></figure>
+  <figure class="card"><img class="shot" alt="故事動畫畫面：小衡接到老闆電話，看板顯示四個數字" src="{{IMG:af_call}}"><figcaption><b>故事動畫（約 3 分半）</b><span>小衡和六個口袋，用故事記住大意。</span></figcaption></figure>
+  <figure class="card"><img class="shot" alt="Power BI 資金安全總覽頁面截圖" src="{{IMG:rp1}}"><figcaption><b>互動圖解頁</b><span>點、放大、查口徑，把報告拆開來看。</span></figcaption></figure>
+ </div>
+ <p class="hint">三種畫面都是這個專案真的做出來的成品（縮圖）。報告資料為<b>示範（模擬）資料</b>，資料截止 2026-10-05，金額單位萬元。</p>
+</header>
+
+<!-- MAP -->
+<section id="map">
+ <h2><small>01</small>全局地圖：六個階段</h2>
+ <p class="lead">像做一道菜：先認識食材（報告），再備料（抓畫面），然後做三道菜（互動頁、導覽影片、故事動畫），最後上桌（上線）。點每一站。</p>
+ <div class="stages" role="group" aria-label="六個階段">
+  <button class="stbtn" aria-pressed="true" data-s="0"><span class="n tA">A</span><div class="e">📊</div><div class="t">讀懂報告</div></button>
+  <button class="stbtn" aria-pressed="false" data-s="1"><span class="n tB">B</span><div class="e">📸</div><div class="t">抓畫面</div></button>
+  <button class="stbtn" aria-pressed="false" data-s="2"><span class="n tC">C</span><div class="e">🖱️</div><div class="t">互動頁</div></button>
+  <button class="stbtn" aria-pressed="false" data-s="3"><span class="n tD">D</span><div class="e">🎙️</div><div class="t">導覽影片</div></button>
+  <button class="stbtn" aria-pressed="false" data-s="4"><span class="n tE">E</span><div class="e">🎬</div><div class="t">故事動畫</div></button>
+  <button class="stbtn" aria-pressed="false" data-s="5"><span class="n tF">F</span><div class="e">🚀</div><div class="t">上線分享</div></button>
+ </div>
+ <div class="card pad">
+  <div class="spanel on" data-p="0">
+   <h3><span class="tag tA">A</span>讀懂報告：先弄清楚它在回答什麼</h3>
+   <div class="io"><div><h4>輸入</h4><ul><li>本機 .pbip 專案（已在 Power BI Desktop 開著）</li></ul></div><div class="ar">➜</div><div class="mid"><h4>動作</h4><ul><li>用 MCP 連線，列出資料表、度量值、關聯</li><li>對模型下 DAX 查詢，核對畫面數字</li></ul></div><div class="ar">➜</div><div><h4>產出</h4><ul><li>架構：8 事實表、10 維度表、151 度量值、55 條關聯</li><li>30 個 KPI 與 DAX 逐項吻合</li></ul></div></div>
+   <p>為什麼先做這步？因為後面所有影片與頁面的數字都要有依據，不能靠「看圖猜」。</p>
+   <div class="pills"><button class="pill" data-go="1">Power BI Desktop／PBIP</button><button class="pill" data-go="2">星狀模型＋DAX</button><button class="pill" data-go="3">Power BI Modeling MCP</button></div>
+  </div>
+  <div class="spanel" data-p="1">
+   <h3><span class="tag tB">B</span>抓畫面：從線上報告重新擷取 7 頁</h3>
+   <div class="io"><div><h4>輸入</h4><ul><li>Publish to web 公開連結</li></ul></div><div class="ar">➜</div><div class="mid"><h4>動作</h4><ul><li>無頭 Chrome 開網址、逐頁切換</li><li>只裁切報表區域，3840×2160</li><li>Pillow 縮成 3 種尺寸</li></ul></div><div class="ar">➜</div><div><h4>產出</h4><ul><li>shots/ 7 張大圖</li><li>assets/ 每頁 3 種尺寸 JPG</li></ul></div></div>
+   <p>為什麼重抓？介紹文章的配圖是簡體版，我們要的是繁體版，所以<b>不引用文章圖片</b>，全部從真實報告重新擷取。</p>
+   <div class="pills"><button class="pill" data-go="4">Publish to web</button><button class="pill" data-go="5">Puppeteer／Playwright</button><button class="pill" data-go="6">Pillow</button></div>
+  </div>
+  <div class="spanel" data-p="2">
+   <h3><span class="tag tC">C</span>互動頁：把報告拆開，點、放大、查口徑</h3>
+   <div class="io"><div><h4>輸入</h4><ul><li>頁面範本（HTML）</li><li>7 頁畫面、影片章節秒數</li></ul></div><div class="ar">➜</div><div class="mid"><h4>動作</h4><ul><li>圖片轉成 base64 嵌進去</li><li>章節秒數取自 timeline.json</li><li>輸出單一 index.html</li></ul></div><div class="ar">➜</div><div><h4>產出</h4><ul><li>3.2 MB 的單檔網頁</li><li>三層樓、星狀模型、七頁熱點、口徑翻牌…</li></ul></div></div>
+   <p>為什麼單檔？雙擊就能開、好分享、不依賴伺服器。</p>
+   <div class="pills"><button class="pill" data-go="7">單檔 HTML 互動頁</button></div>
+  </div>
+  <div class="spanel" data-p="3">
+   <h3><span class="tag tD">D</span>導覽影片：旁白帶你一頁頁看</h3>
+   <div class="io"><div><h4>輸入</h4><ul><li>旁白稿（每句一個畫面任務）</li><li>7 頁真實截圖</li></ul></div><div class="ar">➜</div><div class="mid"><h4>動作</h4><ul><li>TTS 念稿 → 去靜音、重新取樣</li><li>依旁白長度排時間軸</li><li>逐格渲染、合成配樂</li></ul></div><div class="ar">➜</div><div><h4>產出</h4><ul><li>1920×1080、30fps、6 分 03 秒 MP4</li></ul></div></div>
+   <p>關鍵想法：<b>旁白多長，場景就多長</b>——時間軸由音檔長度「推導」，不是手填。</p>
+   <div class="pills"><button class="pill" data-go="8">Gemini TTS</button><button class="pill" data-go="9">ffmpeg</button><button class="pill" data-go="10">Canvas 純函式</button></div>
+  </div>
+  <div class="spanel" data-p="4">
+   <h3><span class="tag tE">E</span>故事動畫：把報告講成一個故事</h3>
+   <div class="io"><div><h4>輸入</h4><ul><li>腳本（你審核過）、風格 A</li><li>film.json（場景與旁白）</li></ul></div><div class="ar">➜</div><div class="mid"><h4>動作</h4><ul><li>TTS → 鎖定時間軸</li><li>場景用 Canvas 逐幀繪製</li><li>程式合成配樂與音效</li></ul></div><div class="ar">➜</div><div><h4>產出</h4><ul><li>10 場景、6485 幀、3:36 MP4</li></ul></div></div>
+   <p>為什麼要動畫？報告是給「看懂的人」；故事讓「還不懂的人」先記住大意。</p>
+   <div class="strip">
+    <figure><img class="shot" alt="動畫片頭：六個口袋掛在晾衣繩上，標題《有個口袋在冒汗》" src="{{IMG:af_title}}"><figcaption>片頭：六個口袋</figcaption></figure>
+    <figure><img class="shot" alt="動畫：六個口袋依序彈出，各掛名牌" src="{{IMG:af_pockets}}"><figcaption>六個口袋＝六個法人</figcaption></figure>
+    <figure><img class="shot" alt="動畫：13 週曲線遠高於備付底線，量出 29.6 倍" src="{{IMG:af_safety}}"><figcaption>第一站：29.6 倍</figcaption></figure>
+    <figure><img class="shot" alt="動畫：六個口袋圍成資金池，人民幣池補缺口" src="{{IMG:af_pool}}"><figcaption>第五站：資金池</figcaption></figure>
+    <figure><img class="shot" alt="動畫：傍晚，小衡貼上便利貼，進度條停在待審批" src="{{IMG:af_end}}"><figcaption>傍晚：待審批</figcaption></figure>
+   </div>
+   <div class="pills"><button class="pill" data-go="11">code-animation/v1</button><button class="pill" data-go="12">程式合成配樂</button><button class="pill" data-go="10">Canvas 純函式</button></div>
+  </div>
+  <div class="spanel" data-p="5">
+   <h3><span class="tag tF">F</span>上線分享：讓別人打開就能看</h3>
+   <div class="io"><div><h4>輸入</h4><ul><li>index.html、兩支 mp4、海報圖</li></ul></div><div class="ar">➜</div><div class="mid"><h4>動作</h4><ul><li>vercel deploy --prod</li><li>commit → push main</li><li>網站檔放 gh-pages 分支</li></ul></div><div class="ar">➜</div><div><h4>產出</h4><ul><li>Vercel 網址（最快）</li><li>GitHub Pages 網址、倉庫與 README</li></ul></div></div>
+   <p>為什麼有兩個網址？Vercel 載入影片最快，適合對外分享；Pages 當備份。</p>
+   <div class="pills"><button class="pill" data-go="13">Vercel</button><button class="pill" data-go="14">Git／GitHub／Pages</button></div>
+  </div>
+ </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="time">
+ <h2><small>02</small>這個專案實際發生的順序</h2>
+ <p class="lead">不是一次做完，而是一步一步驗收、再往下。下面是真實的先後（日期為檔案紀錄）。</p>
+ <div class="tl" style="margin-top:18px">
+  <div class="ev card reveal"><i>1</i><b>連線 Power BI 模型</b><span>讀出架構：8 事實表、10 維度表、151 度量值、55 關聯。</span><em>產出：架構理解、數字核對依據</em></div>
+  <div class="ev card reveal"><i>2</i><b>重新擷取 7 頁繁體畫面</b><span>從 Publish to web 線上報告擷取（2026-10-12）。</span><em>產出：shots/、assets/</em></div>
+  <div class="ev card reveal"><i>3</i><b>做互動圖解頁</b><span>單檔 HTML，零基礎也能點著看懂。</span><em>產出：index.html</em></div>
+  <div class="ev card reveal"><i>4</i><b>做 6:03 導覽影片並嵌入頁面</b><span>Kore 旁白＋程式合成配樂。</span><em>產出：film.mp4</em></div>
+  <div class="ev card reveal"><i>5</i><b>你驗收 → 部署 Vercel → commit、推 GitHub、建 Pages、補 README</b><span>主分支不放大影片，網站檔放 gh-pages。</span><em>產出：三個網址、README</em></div>
+  <div class="ev card reveal"><i>6</i><b>做故事動畫《有個口袋在冒汗》</b><span>先寫腳本、選風格（你選了 A），再製作（10-17）。</span><em>產出：final.mp4（3:36）</em></div>
+  <div class="ev card reveal"><i>7</i><b>動畫並列嵌入互動頁，重新部署</b><span>兩支影片並排、各有章節、不同時播放。</span><em>產出：Vercel／Pages／GitHub 更新</em></div>
+  <div class="ev card reveal"><i>8</i><b>整理「六大分析架構」文檔</b><span>每頁對應：分析核心問題＋主要 KPI。</span><em>產出：六大分析架構.md</em></div>
+  <div class="ev card reveal"><i>9</i><b>本頁：把整個過程講給零基礎的人</b><span>工具、程式碼邏輯、時機、場域、流程與產出。</span><em>產出：這份解說頁</em></div>
+ </div>
+</section>
+
+<!-- MODEL -->
+<section id="model">
+ <h2><small>03</small>階段 A：Power BI 報告長什麼樣</h2>
+ <p class="lead">報告像三層樓：地基是資料，中間是「規則」（模型），最上面才是你看到的畫面。</p>
+ <div class="layers">
+  <div class="layer card"><div class="ic">📄</div><h3>資料層</h3><div class="big">18</div><p>個 CSV：8 張「發生了什麼」（事實表）＋10 張「怎麼分類」（維度表）</p></div>
+  <div class="ar">➜</div>
+  <div class="layer card"><div class="ic">🧩</div><h3>模型層</h3><div class="big">151</div><p>個度量值（DAX 公式）＋55 條關聯（50 啟用、5 停用）</p></div>
+  <div class="ar">➜</div>
+  <div class="layer card"><div class="ic">📊</div><h3>報告層</h3><div class="big">7</div><p>個頁面：首頁＋資金安全＋5 個專題，各回答一個問題</p></div>
+ </div>
+ <div class="two" style="margin-top:22px">
+  <div class="card pad">
+   <h3>星狀模型：點一張事實表，看它連到哪些維度</h3>
+   <p class="hint" style="margin:2px 0 8px">事實表（橘）＝一筆筆發生的事；維度表（綠）＝你用什麼角度切（公司、幣種、日期…）。</p>
+   <div class="facts" id="facts" role="group" aria-label="事實表"></div>
+   <svg class="svgbox" viewBox="0 0 400 60" aria-hidden="true"><text x="200" y="38" text-anchor="middle" fill="var(--orange)" font-size="26">▼ 連到 ▼</text></svg>
+   <div class="dims" id="dims"></div>
+   <p id="factInfo" class="hint"></p>
+  </div>
+  <div class="card pad">
+   <h3>一個度量值怎麼算：可調配資金</h3>
+   <p class="hint" style="margin:2px 0 8px">示範資料，2026-10-05，萬元。點下面看「常見誤解」。</p>
+   <div class="wf" id="wf" style="margin-bottom:34px"></div>
+   <button class="btn" id="wfBtn" aria-pressed="false">看常見誤解：只扣備付行不行？</button>
+   <p id="wfNote" class="hint"></p>
+  </div>
+ </div>
+ <div class="card pad" style="margin-top:18px">
+  <h3>七頁報告各回答一個問題（點縮圖）</h3>
+  <div class="pg" id="pg" style="margin:10px 0">
+   <button aria-pressed="true" data-i="0"><img alt="首頁" src="{{IMG:rp0}}"><span>首頁</span></button>
+   <button aria-pressed="false" data-i="1"><img alt="資金安全總覽" src="{{IMG:rp1}}"><span>資金安全</span></button>
+   <button aria-pressed="false" data-i="2"><img alt="收支與預算" src="{{IMG:rp2}}"><span>收支預算</span></button>
+   <button aria-pressed="false" data-i="3"><img alt="渠道結算與到期" src="{{IMG:rp3}}"><span>結算到期</span></button>
+   <button aria-pressed="false" data-i="4"><img alt="融資與金融工具" src="{{IMG:rp4}}"><span>融資工具</span></button>
+   <button aria-pressed="false" data-i="5"><img alt="集團資金調配" src="{{IMG:rp5}}"><span>集團調配</span></button>
+   <button aria-pressed="false" data-i="6"><img alt="跨境與匯率風險" src="{{IMG:rp6}}"><span>跨境匯率</span></button>
+  </div>
+  <div id="pgInfo" class="card pad" style="background:color-mix(in srgb,var(--teal) 6%,var(--card))"></div>
+ </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+ <h2><small>04</small>工具箱：14 件，各自做什麼</h2>
+ <p class="lead">每件工具都用同一組五個問題回答。顏色標籤告訴你它屬於哪個階段。</p>
+ <div class="tbar" id="tbar" role="group" aria-label="工具"></div>
+ <div class="card pad tool" id="tool"></div>
+</section>
+
+<!-- CODE -->
+<section id="code">
+ <h2><small>05</small>程式碼是怎麼被呼叫的</h2>
+ <p class="lead">兩條管線都是「一個指令讀上一步的檔案、寫下一步的檔案」。先看呼叫順序，再看三個最關鍵的想法。</p>
+ <div class="tbar" id="ptab" role="group" aria-label="管線"><button class="tb" aria-pressed="false" data-k="guide">導覽影片管線</button><button class="tb" aria-pressed="true" data-k="anim">故事動畫管線</button></div>
+ <div class="stp card pad">
+  <div class="steps" id="steps"></div>
+  <div>
+   <div class="ctl"><button class="btn" id="pPlay">⏸ 暫停</button><button class="btn" id="pPrev">◀ 上一步</button><button class="btn" id="pNext">下一步 ▶</button><button class="btn" id="pRe">↺ 重播</button></div>
+   <div id="stepInfo"></div>
+  </div>
+ </div>
+
+ <div class="demo" style="margin-top:22px">
+  <div class="card pad">
+   <h3>想法 ①　畫面＝f(時間)</h3>
+   <p class="hint" style="margin:2px 0 8px">每一幀都是「第 t 秒該長什麼樣」算出來的，不是錄下來的。拖動看看。</p>
+   <canvas id="cv" width="640" height="360" role="img" aria-label="示意畫面：口袋滑入、數字從 0 增加到 42,961.7、進度條增長"></canvas>
+   <input type="range" id="tsl" min="0" max="4" step="0.01" value="1.8" aria-label="時間 t（秒）">
+   <p>t = <b id="tval">1.80</b> 秒　畫面指紋 <span class="fp" id="fp">—</span></p>
+   <div class="ctl"><button class="btn" id="tPlay">▶ 播放</button><button class="btn" id="tShuf">亂序測試：1.8 → 3.5 → 1.8</button></div>
+   <p id="shufOut" class="hint"></p>
+  </div>
+  <div class="card pad">
+   <h3>為什麼這樣設計？</h3>
+   <ul style="margin-left:1.1em">
+    <li><b>可重現：</b>同一個 t，永遠畫出同一張圖（右邊指紋一樣）。</li>
+    <li><b>可局部重跑：</b>只改第 3 場，就只重畫第 3 場。</li>
+    <li><b>可亂序：</b>隨便跳到哪一幀都行，所以能平行抽幀檢查。</li>
+   </ul>
+   <pre><span class="c">// 本專案動畫場景的形狀（節錄自 scenes-a.js）</span>
+SCN['s00-title'] = (c, K) =&gt; {
+  const t = K.t;   <span class="c">// 場景內第幾秒</span>
+  <span class="c">// …用 c（Canvas 畫筆）依 t 畫出這一幀…</span>
+};
+<span class="c">// 全片由 renderFrame(frame) 決定畫什麼</span></pre>
+   <p class="hint"><b>類比：</b>像翻頁動畫書——每一頁獨立畫好。類比不成立之處：這裡的「頁」是用數學式算的。</p>
+  </div>
+ </div>
+
+ <div class="card pad" style="margin-top:18px">
+  <h3>想法 ②　旁白多長，場景就多長（時間軸從音檔推導）</h3>
+  <p class="hint" style="margin:2px 0 8px">拖動「旁白字數」。這是依 film.json 的估算語速（每秒 4 字）算的<b>示意</b>；實際以 TTS 音檔長度為準（本機實測 Kore 約 4.47 字／秒）。</p>
+  <input type="range" id="csl" min="10" max="260" step="1" value="90" aria-label="旁白字數">
+  <p>旁白 <b id="cN">90</b> 字 ➜ 念 <b id="cV">22.5</b> 秒　＋ 前導 0.25 ＋ 尾巴 0.45 ＝ 場景 <b id="cS">23.2</b> 秒 ＝ <b id="cF">695</b> 幀（30 fps）</p>
+  <div class="bar" aria-hidden="true"><i id="bLead" style="background:#9fb7c1"></i><i id="bVoice" style="background:var(--teal2)"></i><i id="bTail" style="background:#9fb7c1"></i></div>
+  <p class="hint">灰＝前導與尾巴的停頓、青＝旁白。字多就變長，場景會自動跟著拉長，不靠硬塞或拉慢播放。</p>
+ </div>
+
+ <div class="card pad" style="margin-top:18px">
+  <h3>想法 ③　cue：讓音效剛好落在關鍵字上</h3>
+  <p class="hint" style="margin:2px 0 8px">程式用「這個片段在整句的第幾個字」估算它被念出來的時間。點一個片段，看音效會放在哪（<b>示意</b>，假設這句旁白念 6 秒）。</p>
+  <div class="pills" id="cueBtns"></div>
+  <p id="cueSent" style="font-size:20px;margin:12px 0;letter-spacing:.04em"></p>
+  <div class="bar" aria-hidden="true"><i id="cueBar" style="background:color-mix(in srgb,var(--teal2) 35%,transparent);width:100%"></i><i id="cueMark" style="background:var(--orange);width:6px;left:0;border-radius:3px"></i></div>
+  <p id="cueOut" class="hint"></p>
+  <pre><span class="c"># 實際用法（節錄自 make_audio.py）：fragment 必須和旁白逐字一致</span>
+ev(cue(S, '二十九點六倍', 0, -.2), sfx_ding(988, 1.0), .9)
+<span class="c">#   cue(場景, 片段, 第幾次出現, 偏移秒) → 時間點　→ 在那個時間放「叮」</span></pre>
+  <p class="hint">因為是依字數估算，會有零點幾秒誤差，所以才有偏移參數，也有 cue_check.py 檢查片段有沒有對上。<b>字幕與音效對時是估算，不是逐字對齊。</b></p>
+ </div>
+</section>
+
+<!-- COMPARE -->
+<section id="cmp">
+ <h2><small>06</small>兩條影片管線，差在哪</h2>
+ <p class="lead">同樣是「旁白＋配樂＋畫面」，但畫面來源和繪製方式不同。</p>
+ <div class="card" style="overflow-x:auto"><table class="cmp">
+  <tr><th></th><th><span class="tag tD">D</span>導覽影片</th><th><span class="tag tE">E</span>故事動畫</th></tr>
+  <tr><td>畫面來源</td><td>7 張真實報告截圖（推近、聚光框）</td><td>全部程式繪製的角色與圖表（示意）</td></tr>
+  <tr><td>畫面技術</td><td>HTML 舞台 stage.html，render(t) 純函式</td><td>Canvas 2D，SCN[場景](c, K) 純函式</td></tr>
+  <tr><td>規格檔</td><td>narration.json、timeline.json</td><td>film.json → timeline.json（程式編譯、不手改）</td></tr>
+  <tr><td>配音</td><td>Gemini TTS Kore → 去靜音 → 重新取樣 44.1 kHz</td><td>Gemini TTS Kore → 重新取樣 → 鎖定時間軸</td></tr>
+  <tr><td>配樂</td><td>程式合成柔和鋼琴＋墊音（72 BPM）</td><td>程式合成馬林巴／撥弦／墊音（108 BPM）＋189 個對時音效</td></tr>
+  <tr><td>渲染</td><td>node render.js：puppeteer 逐格截圖＋ffmpeg</td><td>node render.cjs：Playwright 逐幀＋ffmpeg</td></tr>
+  <tr><td>成品</td><td>362.7 秒、13 場景、−16 LUFS</td><td>216.17 秒、6485 幀、10 場景、−15.6 LUFS</td></tr>
+  <tr><td>適合</td><td>想「對著真實畫面」把每頁看懂</td><td>想「先記住大意」，輕鬆有趣</td></tr>
+ </table></div>
+</section>
+
+<!-- SHIP -->
+<section id="ship">
+ <h2><small>07</small>產出與上線</h2>
+ <p class="lead">檔案怎麼放、哪些進 Git、哪些網址能看。</p>
+ <div class="card pad">
+  <svg class="svgbox" viewBox="0 0 980 360" role="img" aria-label="本機資料夾分三路：commit 推到 GitHub main、網站檔放 gh-pages 分支發佈到 GitHub Pages、vercel deploy 到 Vercel">
+   <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e9792f"/></marker></defs>
+   <rect x="10" y="110" width="250" height="150" rx="16" fill="var(--card)" stroke="var(--teal)" stroke-width="3"/>
+   <text x="135" y="140" text-anchor="middle" font-weight="800" font-size="19" fill="var(--ink)">本機 capital/</text>
+   <text x="135" y="168" text-anchor="middle" font-size="14" fill="var(--mut)">src／film／animation／README</text>
+   <text x="135" y="192" text-anchor="middle" font-size="14" fill="var(--mut)">powerbi-capital-explainer/</text>
+   <text x="135" y="214" text-anchor="middle" font-size="13" fill="var(--mut)">index.html · film.mp4 · story.mp4</text>
+   <text x="135" y="236" text-anchor="middle" font-size="13" fill="var(--mut)">poster.jpg · story_poster.jpg</text>
+   <path d="M262,150 C330,90 380,60 450,60" fill="none" stroke="#e9792f" stroke-width="3" marker-end="url(#ah)"/>
+   <text x="300" y="44" font-size="13" fill="var(--mut)">git push main</text>
+   <rect x="452" y="25" width="250" height="70" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="2"/>
+   <text x="577" y="52" text-anchor="middle" font-weight="800" font-size="16" fill="var(--ink)">GitHub　main 分支</text>
+   <text x="577" y="76" text-anchor="middle" font-size="13" fill="var(--mut)">原始碼＋紀錄，不含大影片</text>
+   <path d="M262,190 L450,190" fill="none" stroke="#e9792f" stroke-width="3" marker-end="url(#ah)"/>
+   <text x="275" y="176" font-size="13" fill="var(--mut)">網站 5 檔 → gh-pages</text>
+   <rect x="452" y="155" width="250" height="70" rx="14" fill="var(--card)" stroke="var(--line)" stroke-width="2"/>
+   <text x="577" y="182" text-anchor="middle" font-weight="800" font-size="16" fill="var(--ink)">gh-pages 分支</text>
+   <text x="577" y="206" text-anchor="middle" font-size="13" fill="var(--mut)">index、2 支 mp4、2 張海報</text>
+   <path d="M704,190 L760,190" fill="none" stroke="#e9792f" stroke-width="3" marker-end="url(#ah)"/>
+   <rect x="762" y="155" width="205" height="70" rx="14" fill="var(--card)" stroke="var(--teal)" stroke-width="3"/>
+   <text x="864" y="182" text-anchor="middle" font-weight="800" font-size="16" fill="var(--ink)">GitHub Pages</text>
+   <text x="864" y="206" text-anchor="middle" font-size="13" fill="var(--mut)">備份網址</text>
+   <path d="M262,230 C330,300 380,320 450,320" fill="none" stroke="#e9792f" stroke-width="3" marker-end="url(#ah)"/>
+   <text x="275" y="350" font-size="13" fill="var(--mut)">vercel deploy --prod</text>
+   <rect x="452" y="285" width="515" height="70" rx="14" fill="var(--card)" stroke="var(--teal)" stroke-width="3"/>
+   <text x="710" y="312" text-anchor="middle" font-weight="800" font-size="16" fill="var(--ink)">Vercel　powerbi-capital-explainer.vercel.app</text>
+   <text x="710" y="336" text-anchor="middle" font-size="13" fill="var(--mut)">載入影片最快，對外分享用這個</text>
+  </svg>
+  <div class="two" style="margin-top:14px">
+   <div><b>為什麼 main 不放影片？</b><br><span class="hint">film.mp4 約 74 MB、story.mp4 約 17 MB，放進 Git 歷史會讓倉庫變胖；影片只放 gh-pages 與 Vercel，.gitignore 擋掉。</span></div>
+   <div><b>為什麼兩支影片都能拖進度條？</b><br><span class="hint">伺服器要支援 <span class="k">Range</span> 請求（回 206），影片也做了 <span class="k">faststart</span>（索引放檔頭）。Vercel 兩者都有。</span></div>
+  </div>
+ </div>
+</section>
+
+<!-- USE -->
+<section id="use">
+ <h2><small>08</small>想做什麼 → 用哪個</h2>
+ <div class="dec">
+  <div class="card"><div class="e">🔍</div><div><div class="q">想核對報告的數字</div><div class="a">MCP 連模型 → 下 DAX 查詢，對照畫面</div></div></div>
+  <div class="card"><div class="e">🖱️</div><div><div class="q">想點、放大、查口徑</div><div class="a">互動圖解頁（單檔 HTML）</div></div></div>
+  <div class="card"><div class="e">🎙️</div><div><div class="q">想對著真實畫面一頁頁看懂</div><div class="a">導覽影片（6:03）</div></div></div>
+  <div class="card"><div class="e">🎬</div><div><div class="q">想先記住大意、輕鬆看</div><div class="a">故事動畫（3:36）</div></div></div>
+  <div class="card"><div class="e">✏️</div><div><div class="q">想改旁白的字</div><div class="a">重跑：TTS → timeline --lock → make_audio → mix → render → finish</div></div></div>
+  <div class="card"><div class="e">🖼️</div><div><div class="q">只想改某個畫面</div><div class="a">改 scenes-*.js → --preview 抽幀看 → 再 --render</div></div></div>
+  <div class="card"><div class="e">🔗</div><div><div class="q">想分享給別人</div><div class="a">Vercel 網址（最快）；Pages 當備份</div></div></div>
+  <div class="card"><div class="e">📑</div><div><div class="q">想向主管說明每頁在回答什麼</div><div class="a">六大分析架構文檔（核心問題＋KPI）</div></div></div>
+ </div>
+</section>
+
+<!-- DICT -->
+<section id="dict">
+ <h2><small>09</small>名詞小字典</h2>
+ <input class="gs" id="gs" type="search" placeholder="搜尋名詞，例如：DAX、LUFS、Range…" aria-label="搜尋名詞">
+ <div class="gl" id="gl"></div>
+</section>
+
+<!-- PITFALLS -->
+<section id="pit">
+ <h2><small>10</small>踩過的坑與誠實的限制</h2>
+ <p class="lead">做的過程中真的遇到、並修掉的問題；以及目前還沒做到的事。</p>
+ <div class="pit">
+  <div class="card"><b>簡體字配圖不能用</b><span>介紹文章的圖是簡體版 → 全部改從真實報告重新擷取繁體畫面。</span></div>
+  <div class="card"><b>TTS 音檔速度被加快 1.84 倍</b><span>TTS 是 24 kHz，混音時間軸是 44.1 kHz；直接貼會變快 → 先重新取樣。</span></div>
+  <div class="card"><b>手填章節秒數會錯</b><span>章節秒數一律由 timeline.json 的場景起點產生。</span></div>
+  <div class="card"><b>影片只複製一半（moov atom not found）</b><span>ffmpeg 還沒結束就複製 → 等它跑完再複製。</span></div>
+  <div class="card"><b>GitHub Pages 載入影片很慢</b><span>是這台機器連 Pages 被限速（約 55 KB/s），不是檔案問題；Vercel 約 8.5 MB/s → 對外用 Vercel。</span></div>
+  <div class="card"><b>本機測試拖不動進度條</b><span>Python 內建 http.server 不支援 Range → 改用支援 Range 的伺服器測。</span></div>
+  <div class="card"><b>頁面橫向捲動溢出</b><span>grid 子元素加 min-width:0。</span></div>
+  <div class="card"><b>數字別說過頭</b><span>預算執行率 110.5% 是「超支」不是達標；授信是備用額度不是現金；遠期後淨敞口反而 +207.8。</span></div>
+  <div class="card lim"><b>限制：旁白沒有人工聆聽</b><span>發音與數字讀法請自行確認；兩支影片都一樣。</span></div>
+  <div class="card lim"><b>限制：沒有獨立評審</b><span>只做自查（抽幀、量測、數字對 DAX）。</span></div>
+  <div class="card lim"><b>限制：字幕與音效是估時</b><span>依字數比例估算，非逐字對齊，可能差零點幾秒。</span></div>
+  <div class="card lim"><b>限制：資料是示範（模擬）資料</b><span>不代表任何真實公司；動畫畫面為示意，不是報告截圖。</span></div>
+ </div>
+</section>
+
+<section>
+ <h2><small>★</small>一張圖記住</h2>
+ <div class="card pad"><svg class="svgbox" viewBox="0 0 980 150" role="img" aria-label="六階段流程：讀懂報告、抓畫面、互動頁、導覽影片、故事動畫、上線分享">
+  <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e9792f"/></marker></defs>
+  <g font-size="15" font-weight="800" text-anchor="middle">
+   <rect x="5" y="30" width="140" height="80" rx="14" fill="#13788a"/><text x="75" y="64" fill="#fff">A 讀懂報告</text><text x="75" y="88" fill="#fff" font-size="12" font-weight="400">模型・DAX・MCP</text>
+   <rect x="170" y="30" width="140" height="80" rx="14" fill="#2a9d7c"/><text x="240" y="64" fill="#fff">B 抓畫面</text><text x="240" y="88" fill="#fff" font-size="12" font-weight="400">Chrome・Pillow</text>
+   <rect x="335" y="30" width="140" height="80" rx="14" fill="#e9792f"/><text x="405" y="64" fill="#fff">C 互動頁</text><text x="405" y="88" fill="#fff" font-size="12" font-weight="400">單檔 HTML</text>
+   <rect x="500" y="30" width="140" height="80" rx="14" fill="#7a5af8"/><text x="570" y="64" fill="#fff">D 導覽影片</text><text x="570" y="88" fill="#fff" font-size="12" font-weight="400">TTS・ffmpeg</text>
+   <rect x="665" y="30" width="140" height="80" rx="14" fill="#d6457f"/><text x="735" y="64" fill="#fff">E 故事動畫</text><text x="735" y="88" fill="#fff" font-size="12" font-weight="400">Canvas・cue</text>
+   <rect x="830" y="30" width="140" height="80" rx="14" fill="#2f6fe0"/><text x="900" y="64" fill="#fff">F 上線分享</text><text x="900" y="88" fill="#fff" font-size="12" font-weight="400">Vercel・GitHub</text>
+  </g>
+  <g stroke="#e9792f" stroke-width="3" marker-end="url(#ah2)"><line x1="146" y1="70" x2="168" y2="70"/><line x1="311" y1="70" x2="333" y2="70"/><line x1="476" y1="70" x2="498" y2="70"/><line x1="641" y1="70" x2="663" y2="70"/><line x1="806" y1="70" x2="828" y2="70"/></g>
+ </svg>
+ <p class="hint" style="text-align:center">共同原則：<b>每一步的輸出是下一步的輸入；數字有出處、時間軸由音檔推導、每一幀可重現。</b></p></div>
+</section>
+</main>
+<footer><div class="wrap">資料為示範（模擬）資料，截止 2026-10-05。本頁所有圖片為專案實際成品縮圖，已內嵌，離線可開。製作與驗證紀錄見專案 README、<code>film/GAUNTLET.md</code>、<code>animation/review.md</code>。</div></footer>
+
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* nav highlight + reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){$$('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-40% 0px -55% 0px'});
+$$('section[id]').forEach(s=>io.observe(s));
+const rv=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rv.unobserve(e.target)}}),{threshold:.15});
+$$('.reveal').forEach(e=>RM?e.classList.add('in'):rv.observe(e));
+
+/* stages */
+function setStage(i){$$('.stbtn').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.s===i));$$('.spanel').forEach(p=>p.classList.toggle('on',+p.dataset.p===i))}
+$$('.stbtn').forEach(b=>b.onclick=()=>setStage(+b.dataset.s));
+$$('[data-go]').forEach(b=>b.onclick=()=>{selTool(+b.dataset.go);$('#tools').scrollIntoView({behavior:RM?'auto':'smooth'})});
+
+/* star model（關聯資料取自互動頁的 E；合計 55 條，含 5 條停用） */
+const FACT={'事實_資金流水':['公司','資金帳戶','幣種','渠道','往來方','資金專案','金融合同','資金池','日期'],
+ '事實_金融日快照':['公司','幣種','往來方','金融合同','資金池','日期'],
+ '事實_到期事項事件':['公司','幣種','渠道','往來方','資金專案','金融合同','日期'],
+ '事實_渠道結算':['公司','幣種','渠道','往來方','日期'],
+ '事實_帳戶日餘額':['公司','資金帳戶','幣種','資金池','日期'],
+ '事實_預算預測':['公司','幣種','渠道','資金專案','金融合同','資金池','計畫版本','日期'],
+ '事實_金融業務事件':['公司','資金帳戶','幣種','往來方','資金專案','金融合同','資金池','日期'],
+ '事實_每日匯率':['幣種','日期']};
+const DIMS=['公司','幣種','日期','往來方','渠道','資金池','資金帳戶','資金專案','金融合同','計畫版本'];
+const FDESC={'事實_資金流水':'每一筆資金進出（約 10 萬筆）','事實_金融日快照':'每天的貸款、理財等餘額快照（約 4.5 萬筆）','事實_到期事項事件':'未來要收、要付的事項','事實_渠道結算':'各銷售渠道的結算與回款','事實_帳戶日餘額':'每個帳戶每天的餘額（32,880 列）','事實_預算預測':'預算與預測數','事實_金融業務事件':'借款、還款、遠期等金融業務','事實_每日匯率':'每天各幣種兌人民幣匯率'};
+const fEl=$('#facts'),dEl=$('#dims');
+dEl.innerHTML=DIMS.map(d=>`<span class="db" data-d="${d}">${d}</span>`).join('');
+Object.keys(FACT).forEach((f,i)=>{const b=document.createElement('button');b.className='fb';b.textContent=f;b.setAttribute('aria-pressed',i===0);b.onclick=()=>selFact(f);fEl.appendChild(b)});
+function selFact(f){$$('.fb').forEach(b=>b.setAttribute('aria-pressed',b.textContent===f));const set=new Set(FACT[f]);$$('.db').forEach(d=>{const h=set.has(d.dataset.d);d.classList.toggle('hit',h);d.classList.toggle('off',!h)});$('#factInfo').textContent=`${f}：${FDESC[f]}。連到 ${FACT[f].length} 個維度（全模型 8 張事實表、10 張維度表）。`}
+selFact('事實_資金流水');
+
+/* 可調配資金 waterfall：42,961.7 − 1,209.8 − 7,224.1 = 34,527.8 */
+(function(){const v=[['可用資金',42961.7,'#13788a'],['−最低運營備付',1209.8,'#e9792f'],['−調撥限制',7224.1,'#d6457f'],['＝可調配資金',34527.8,'#2a9d7c']];
+ const mx=42961.7,w=$('#wf');w.innerHTML=v.map(x=>`<div style="background:${x[2]};height:${Math.max(x[1]/mx*100,3)}%"><b>${x[1].toLocaleString('en-US',{minimumFractionDigits:1})}</b><span>${x[0]}</span></div>`).join('');
+ const btn=$('#wfBtn'),note=$('#wfNote');
+ btn.onclick=()=>{const on=btn.getAttribute('aria-pressed')==='true';btn.setAttribute('aria-pressed',!on);note.innerHTML=on?'':'<b>只扣備付會算出 41,751.9，比真實值多了 7,224.1。</b>報告的口徑是「可用 − 最低運營備付 − 調撥限制」，三者加總恰好 34,527.8。也要注意：首頁的可調配 34,527.8 與第 5 頁「參與資金池可調配 33,188」口徑不同，不能直接相減。'};
+ note.textContent=''})();
+
+/* 七頁 */
+const PG=[['首頁','一進來先看見什麼？','標題、四個主題、4 個總覽數字（可用資金 42,961.7、可調配 34,527.8、13 週最低 35,812.5、最大缺口 908.6）。'],
+['資金安全總覽','未來 13 週，誰會先缺錢？','總量充裕，但區域性有缺口：香港貿易・人民幣自 10-15 起見底，最大缺口 908.6；最低 35,812.5 是備付底線的 29.6 倍。'],
+['收支與預算','錢花在哪，預算跑偏多少？','淨現金流 37,316（全靠經營活動），預算執行率 110.5%＝超支，香港貿易最高 126.1%。'],
+['渠道結算與到期','該收該付的，什麼時候？','未結應收 1,337、逾期 71（5.3%）；自家逾期應付 0；未來 30 日要付 4,813。'],
+['融資與金融工具','借錢貴不貴，什麼時候還？','貸款 7,017、加權年利率 5.73%；可提款授信 7,707 只是備用額度，理財可變現 0。'],
+['集團資金調配','能不能先不借，內部解決？','人民幣資金池穩健供給 14,997.3，可補香港貿易缺口 908.6，匹配後缺口 0——但只是候選安排，須審批。'],
+['跨境與匯率風險','外幣敞口要不要管？','對沖前淨敞口 19,616；做了遠期反而變 19,824（+207.8）；各幣種不利 5% 影響 −991。']];
+function selPg(i){$$('#pg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));$('#pgInfo').innerHTML=`<b>${esc(PG[i][0])}</b>　<span class="tag tA">問題</span>${esc(PG[i][1])}<br>${esc(PG[i][2])}<br><span class="hint">單位萬元；示範資料，2026-10-05。</span>`}
+$$('#pg button').forEach(b=>b.onclick=()=>selPg(+b.dataset.i));selPg(0);
+
+/* 工具箱 */
+const T=[
+{n:'Power BI Desktop／PBIP',s:'A',e:'📊',plain:'微軟的報表軟體。PBIP 是把報表拆成一堆文字檔的「專案格式」，能存進 Git、也能被程式讀。',when:'要做、改或「讀」一份報表的時候。',where:'財務、營運、銷售等各種分析報表。',flow:['匯入資料','建立關聯','寫度量值','排版視覺','發佈'],out:'.pbip 專案與報表頁面。',here:'本專案的 .pbip 是被「讀」的對象，用來查架構、核對數字。'},
+{n:'星狀模型＋DAX',s:'A',e:'🧩',plain:'事實表記「發生了什麼」，維度表記「用什麼角度看」。DAX 是寫「度量值」的公式語言，結果會隨篩選器（公司、幣種、日期）即時重算。',when:'同一個數字要能被切成不同角度時。',where:'任何 Power BI／Excel 資料模型。',flow:['事實表連維度表','度量值引用欄位','視覺繫結度量值','篩選器改變→重算'],out:'151 個度量值，例如可調配資金、預算執行率。',here:'畫面 30 個 KPI 逐項對 DAX，全部吻合。',code:'// 概念：可調配資金 ＝ 可用資金 − 最低運營備付 − 調撥限制\n// 42,961.7 − 1,209.8 − 7,224.1 ＝ 34,527.8（萬元）'},
+{n:'Power BI Modeling MCP',s:'A',e:'🔌',plain:'一個「翻譯官」：讓 AI 助手能用工具讀、查你開著的 Power BI 模型，而不是只能看截圖猜。MCP 是一種讓 AI 呼叫外部工具的標準。',when:'想讓 AI 看懂現有模型、或核對報表數字時。',where:'本機已開啟的 Desktop 模型，或 PBIP／TMDL 檔案。',flow:['連線到模型','列出資料表、度量值、關聯','執行 DAX 查詢','取回結果對照'],out:'架構清單；30 個 KPI 與 DAX 的對照表。',here:'確認 8 事實表、10 維度表、151 度量值、55 關聯，並核對畫面數字。'},
+{n:'Publish to web（發佈到網路）',s:'B',e:'🌐',plain:'Power BI 提供的公開連結：任何人打開都能看，不用登入。',when:'需要從「線上版」取得畫面，或公開展示示範資料時。',where:'公開展示。注意：公開＝任何人可看，只適合示範資料。',flow:['發佈報表','取得連結','瀏覽器開啟'],out:'一條公開網址。',here:'用它重新擷取繁體畫面，取代簡體版文章配圖。'},
+{n:'Puppeteer／Playwright＋Chrome',s:'B',e:'🤖',plain:'讓程式操作一個「看不見視窗」的 Chrome：開網頁、點按鈕、截圖、執行 JS。',when:'要自動截圖、逐格渲染影片、檢查網頁時。',where:'截圖、自動測試、影片渲染。',flow:['啟動 Chrome','開網址','等載入完成','截圖／執行 JS'],out:'PNG 圖片（擷取為 3840×2160）。',here:'擷取 7 頁畫面；導覽影片用 puppeteer、動畫用 Playwright 逐幀渲染；也用來檢查頁面。'},
+{n:'Pillow（Python 影像）',s:'B',e:'🖼️',plain:'Python 的圖片處理工具，這裡只做「縮圖」。',when:'同一張圖要多種尺寸時（縮圖、放大查看、嵌入頁面）。',where:'批次處理圖片。',flow:['讀 3840 大圖','縮成 1920／960','存成 JPG'],out:'每頁 3 種尺寸 JPG（assets/）。',here:'互動頁嵌小圖、點開看大圖，頁面才不會太肥。'},
+{n:'單檔 HTML 互動頁',s:'C',e:'🖱️',plain:'把網頁、圖片、互動全部包成「一個檔案」，雙擊就能開。用的是 HTML、CSS、SVG 和原生 JavaScript。',when:'要分享、離線看、部署越簡單越好時。',where:'教學、說明、簡報型網頁。',flow:['寫範本','圖片轉 base64 嵌入','章節秒數寫入','輸出 index.html'],out:'index.html（約 3.2 MB）。',here:'三層樓、星狀模型、七頁熱點、口徑翻牌、兩支影片並列。',code:"# build_explainer.py（節錄）：用占位字串把資料塞進範本\nt = t.replace('/*CH*/[]',  json.dumps(CH,  ensure_ascii=False))\nt = t.replace('/*CH2*/[]', json.dumps(CH2, ensure_ascii=False))"},
+{n:'Gemini TTS（Kore 女聲）',s:'D',e:'🎙️',plain:'把文字念成人聲。Kore 是溫和的女聲。',when:'要旁白、又不想自己錄音時。',where:'導覽、教學、動畫旁白。',flow:['旁白稿一句一個檔','呼叫 TTS','得到 24 kHz wav','去頭尾靜音＋重新取樣 44.1 kHz'],out:'每個場景一個 wav。',here:'兩支影片的旁白都用它；失敗會重試 3 次，已有檔案就略過。',code:"# gen_tts.py（節錄）：只補缺檔，所以改一句只重做那一句\nif os.path.exists(out) and os.path.getsize(out) > 10000:\n    return s['k'], 'cached'"},
+{n:'ffmpeg',s:'D',e:'🎞️',plain:'影音處理的瑞士刀：轉檔、合成、抽幀、量響度。',when:'要把圖片序列和聲音合成 MP4、或做網頁版時。',where:'所有影片後製。',flow:['畫面＋音軌','編碼 H.264／AAC','faststart（索引放檔頭）','解碼檢查'],out:'MP4 成品與網頁版。',here:'合成兩支影片、去靜音、重新取樣、量 LUFS、抽海報。',code:'ffmpeg -i final.mp4 -c copy -movflags +faststart story.mp4\n# 不重新編碼，只把索引搬到檔頭，網頁才能邊載邊播、拖進度條'},
+{n:'Canvas 2D＋純函式逐幀渲染',s:'E',e:'🖌️',plain:'Canvas 像一支畫筆。你告訴它「第 t 秒該畫什麼」，它就畫出那一幀。',when:'要精準、可重現、可局部重跑的動畫時。',where:'資訊動畫、圖表動畫、解說影片。',flow:['算出 t','呼叫場景函式','畫在 Canvas','截成 PNG','ffmpeg 合成'],out:'6485 張畫面（動畫）。',here:'十個場景各是一個函式；角色、圖表、轉場都是程式畫的。',code:"SCN['s03-safety'] = (c, K) => {\n  const t = K.t;  // 場景內第幾秒\n  // …依 t 畫出這一幀…\n};"},
+{n:'code-animation/v1（動畫專案規格）',s:'E',e:'📐',plain:'動畫專案的「規格書＋分鏡＋劇場」。film.json 寫場景和旁白，timeline.json 由程式算出（絕不手改），scenes 寫每場怎麼畫。',when:'要把一篇內容做成可重跑、可修改的動畫時。',where:'有旁白的說明型動畫。',flow:['腳本','選風格','film.json','TTS','timeline --lock','配樂音效','mix','render','finish／validate'],out:'final.mp4、timeline.json、可重跑的原始碼。',here:'《有個口袋在冒汗》：10 場景、216.17 秒。',code:'python tools/pipeline.py timeline . --lock\npython tools/pipeline.py mix .\nnode tools/render.cjs . --render\npython tools/pipeline.py finish . && python tools/pipeline.py validate .'},
+{n:'程式合成配樂與音效（numpy）',s:'E',e:'🎹',plain:'用程式「算」出馬林巴、撥弦、墊音，和叮、咚、嗖這類音效；旁白出現時配樂自動壓低（閃避）。',when:'不想找版權音樂、又要音效剛好對上畫面時。',where:'自製影片配樂。',flow:['選和弦進行與速度','合成樂器','依旁白閃避','依 cue 放音效'],out:'music.wav＋sfx.wav（48 kHz 立體聲）。',here:'動畫有 189 個對時音效；母帶 −15.6 LUFS、峰值 −1.5 dBFS。'},
+{n:'Vercel',s:'F',e:'🚀',plain:'把資料夾放上網路的服務，給你一個網址，並用 CDN 讓各地都載得快。',when:'要對外分享、需要快速載入影片時。',where:'靜態網站、前端專案。',flow:['選好資料夾','vercel deploy --prod','取得網址','驗證內容與 Range'],out:'https://powerbi-capital-explainer.vercel.app',here:'兩支影片可拖進度條；這台機器上載入比 Pages 快很多。',code:'cd powerbi-capital-explainer\nvercel deploy --prod --yes'},
+{n:'Git／GitHub／GitHub Pages',s:'F',e:'🌳',plain:'Git 是「存檔歷史」；GitHub 是雲端倉庫；Pages 把某個分支當網站發佈。',when:'要備份、留紀錄、免費放靜態網站時。',where:'原始碼管理與靜態網站。',flow:['commit','push main','網站檔放 gh-pages','Pages 重建'],out:'倉庫、README、Pages 網址。',here:'main 不放大影片；gh-pages 只放 5 個網站檔。'}];
+const tb=$('#tbar'),tt=$('#tool');
+T.forEach((x,i)=>{const b=document.createElement('button');b.className='tb';b.setAttribute('aria-pressed',i===0);b.dataset.i=i;b.innerHTML=`<span class="tag t${x.s}">${x.s}</span>${esc(x.n)}`;b.onclick=()=>selTool(i);tb.appendChild(b)});
+function selTool(i){const x=T[i];$$('.tb',tb).forEach(b=>b.setAttribute('aria-pressed',+b.dataset.i===i));
+ tt.innerHTML=`<h3>${x.e} ${esc(x.n)} <span class="tag t${x.s}">階段 ${x.s}</span></h3><p style="font-size:17px">${esc(x.plain)}</p>
+ <div class="five"><div><h4>⏱ 應用時機點</h4>${esc(x.when)}</div><div><h4>📍 應用場域</h4>${esc(x.where)}</div>
+ <div><h4>🔧 工作流程</h4><div class="flow">${x.flow.map((f,k)=>(k?'<i>➜</i>':'')+`<span>${esc(f)}</span>`).join('')}</div></div>
+ <div><h4>📦 產出結果</h4>${esc(x.out)}</div></div>
+ <p style="margin-top:12px"><span class="tag tA">本專案</span>${esc(x.here)}</p>${x.code?`<pre>${esc(x.code)}</pre>`:''}`}
+selTool(0);
+
+/* 管線步進 */
+const PIPE={
+guide:[['shoot.js','線上報告網址','shots/ 7 張 3840×2160','無頭 Chrome 逐頁切換並裁切'],
+['make_assets.py','shots/','assets/ 三種尺寸','縮圖，供頁面與影片使用'],
+['gen_tts.py','narration.json（旁白稿）','audio/*.wav（24 kHz）','Gemini Kore；只補缺檔'],
+['fix_vo.py','audio/','vo44/*.wav','去頭尾靜音＋重新取樣 44.1 kHz'],
+['build_timeline.py','vo44/ 音檔長度','timeline.json','場景長度＝前導＋旁白＋尾巴'],
+['mkaudio.py','timeline.json','mix_raw.wav','程式合成配樂與轉場音效'],
+['loudnorm（ffmpeg）','mix_raw.wav','mix.wav','響度標準化到 −16 LUFS'],
+['verify_audio.py','mix＋timeline','驗證報告','旁白是否落在各場景時間窗內'],
+['render.js','stage.html＋timeline.json','out_final.mp4','逐格截圖＋ffmpeg 合成（約 17 分鐘）'],
+['build_explainer.py','範本＋圖片＋timeline','index.html','章節秒數取自 timeline.json']],
+anim:[['gen_voice.py','film.json 旁白','audio/<場景>.wav','Gemini Kore，單一聲線'],
+['pipeline.py timeline . --lock','旁白實際長度','timeline.json（鎖定）','6485 幀、216.17 秒；程式編譯、不手改'],
+['make_audio.py','timeline.json＋旁白','music.wav、sfx.wav','合成配樂、閃避、189 個 cue 音效'],
+['pipeline.py mix .','旁白＋音樂＋音效','mix-master.wav','混音與響度（−15.6 LUFS）'],
+['render.cjs --preview','scenes＋timeline','抽幀 126 張','檢查場景邊界、轉場、亂序重畫'],
+['render.cjs --render','scenes＋timeline','silent.mp4','Playwright 逐幀（約 14 分鐘）'],
+['pipeline.py finish .','silent.mp4＋母帶','final.mp4','H.264／AAC，完整解碼檢查'],
+['pipeline.py validate .','final.mp4','檢查報告','尺寸、幀率、幀數、音畫時長']]};
+let pk='anim',ps=0,pt=null,playing=!RM;
+function renderSteps(){const L=PIPE[pk];$('#steps').innerHTML=L.map((s,i)=>`<button class="step${i===ps?' on':''}${i<ps?' done':''}" data-i="${i}"><b>${i+1}</b>${esc(s[0])}</button>`).join('');
+ $$('.step').forEach(b=>b.onclick=()=>{ps=+b.dataset.i;playing=false;sync()});
+ const s=L[ps];$('#stepInfo').innerHTML=`<h3>第 ${ps+1} 步：<code>${esc(s[0])}</code></h3><div class="io2"><div><b>讀</b><br>${esc(s[1])}</div><div class="ar">➜</div><div><b>寫</b><br>${esc(s[2])}</div></div><p style="margin-top:10px">${esc(s[3])}</p>`}
+function sync(){renderSteps();$('#pPlay').textContent=playing?'⏸ 暫停':'▶ 播放';clearInterval(pt);if(playing)pt=setInterval(()=>{if(ps<PIPE[pk].length-1){ps++;renderSteps()}else{playing=false;sync()}},2200)}
+$('#pPlay').onclick=()=>{playing=!playing;sync()};
+$('#pPrev').onclick=()=>{playing=false;ps=Math.max(0,ps-1);sync()};
+$('#pNext').onclick=()=>{playing=false;ps=Math.min(PIPE[pk].length-1,ps+1);sync()};
+$('#pRe').onclick=()=>{ps=0;playing=true;sync()};
+$$('#ptab .tb').forEach(b=>b.onclick=()=>{pk=b.dataset.k;ps=0;$$('#ptab .tb').forEach(x=>x.setAttribute('aria-pressed',x===b));playing=!RM;sync()});
+playing=false;sync();
+const stpIO=new IntersectionObserver(es=>{if(es[0].isIntersecting){stpIO.disconnect();if(!RM){ps=0;playing=true;sync()}}},{threshold:.3});stpIO.observe($('.stp'));
+
+/* 想法① canvas：畫面＝f(t) */
+const cv=$('#cv'),cx=cv.getContext('2d',{willReadFrequently:true}); // 要反覆讀回像素算指紋：固定走軟體渲染，避免 GPU／CPU 切換造成抗鋸齒差一點點
+const ease=x=>1-Math.pow(1-Math.min(1,Math.max(0,x)),3),back=x=>{x=Math.min(1,Math.max(0,x));const c1=1.7,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+function draw(t){const W=640,H=360;const g=cx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#fff3e0');g.addColorStop(1,'#ffd9b0');cx.fillStyle=g;cx.fillRect(0,0,W,H);
+ cx.fillStyle='#e7c79a';cx.fillRect(0,300,W,60);
+ const px=-120+back(t/1.2)*(220),py=190;
+ cx.fillStyle='#3aa0b5';cx.beginPath();cx.moveTo(px-50,py+70);cx.quadraticCurveTo(px-62,py-10,px,py-24);cx.quadraticCurveTo(px+62,py-10,px+50,py+70);cx.closePath();cx.fill();
+ cx.fillStyle='#ffc933';cx.fillRect(px-20,py-40,40,18);
+ cx.fillStyle='#0f2b3d';cx.beginPath();cx.arc(px-16,py+16,4,0,6.3);cx.arc(px+16,py+16,4,0,6.3);cx.fill();
+ cx.strokeStyle='#0f2b3d';cx.lineWidth=3;cx.beginPath();cx.arc(px,py+30,10,.15*Math.PI,.85*Math.PI);cx.stroke();
+ if(t>3){const d=ease((t-3)/.6);cx.fillStyle='rgba(120,200,255,.9)';cx.beginPath();cx.ellipse(px+40,py-6+d*20,5,8,0,0,6.3);cx.fill()}
+ const n=42961.7*ease((t-1)/2);cx.fillStyle='#0f2b3d';cx.font='bold 40px sans-serif';cx.textAlign='left';cx.fillText(n.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1}),270,150);
+ cx.font='16px sans-serif';cx.fillStyle='#58727f';cx.fillText('可用資金（萬元，示意）',272,176);
+ cx.fillStyle='#d6e2e7';cx.fillRect(270,200,330,16);cx.fillStyle='#e9792f';cx.fillRect(270,200,330*ease((t-1)/2),16)}
+function fp(t){draw(t);const d=cx.getImageData(0,0,640,360).data;let h=2166136261;for(let i=0;i<d.length;i+=37){h^=d[i];h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')}
+function setT(t){$('#tval').textContent=(+t).toFixed(2);draw(+t);$('#fp').textContent=fp(+t)}
+$('#tsl').oninput=e=>{stopT();setT(e.target.value)};
+let tAnim=null;function stopT(){if(tAnim){cancelAnimationFrame(tAnim);tAnim=null;$('#tPlay').textContent='▶ 播放'}}
+$('#tPlay').onclick=()=>{if(tAnim){stopT();return}$('#tPlay').textContent='⏸ 暫停';const s=performance.now(),from=+$('#tsl').value>=3.95?0:+$('#tsl').value;(function f(now){const t=from+(now-s)/1000;if(t>=4){$('#tsl').value=4;setT(4);stopT();return}$('#tsl').value=t;setT(t);tAnim=requestAnimationFrame(f)})(s)};
+$('#tShuf').onclick=()=>{stopT();const a=fp(1.8),b=fp(3.5),c=fp(1.8);$('#shufOut').innerHTML=`t=1.8 → <span class="fp">${a}</span>　t=3.5 → <span class="fp">${b}</span>　再回 t=1.8 → <span class="fp">${c}</span>　${a===c?'✅ 前後一樣：跳來跳去也畫得出同一張圖。':'⚠ 不一致'}`;setT(+$('#tsl').value)};
+setT(1.8);
+
+/* 想法②：字數 → 秒數 → 幀數 */
+function calc(){const n=+$('#csl').value,v=n/4,s=0.25+v+0.45,f=Math.round(s*30);$('#cN').textContent=n;$('#cV').textContent=v.toFixed(1);$('#cS').textContent=s.toFixed(1);$('#cF').textContent=f;
+ const a=.25/s*100,b=v/s*100,c=.45/s*100;$('#bLead').style.cssText=`background:#9fb7c1;left:0;width:${a}%`;$('#bVoice').style.cssText=`background:var(--teal2);left:${a}%;width:${b}%`;$('#bTail').style.cssText=`background:#9fb7c1;left:${a+b}%;width:${c}%`}
+$('#csl').oninput=calc;calc();
+
+/* 想法③：cue */
+const SENT='最低也有約三點六億元，是備付底線的二十九點六倍，穩得很。',FR=['三點六億元','二十九點六倍','穩得很'],VD=6;
+$('#cueBtns').innerHTML=FR.map((f,i)=>`<button class="pill" data-i="${i}">${f}</button>`).join('');
+function selCue(i){const f=FR[i],idx=SENT.indexOf(f),t=idx/SENT.length*VD;
+ $('#cueSent').innerHTML=esc(SENT.slice(0,idx))+'<span class="k" style="background:var(--orange);color:#fff">'+esc(f)+'</span>'+esc(SENT.slice(idx+f.length));
+ $('#cueMark').style.left=Math.min(idx/SENT.length*100,99)+'%';
+ $('#cueOut').innerHTML=`「${esc(f)}」是整句 ${SENT.length} 字裡的第 ${idx+1} 個字開始 → ${idx}/${SENT.length} × ${VD} 秒 ≈ <b>${t.toFixed(2)} 秒</b>。音效放在這裡（再加偏移微調）。`}
+$$('#cueBtns .pill').forEach(b=>b.onclick=()=>selCue(+b.dataset.i));selCue(1);
+
+/* 字典 */
+const G=[['PBIP','Power BI 專案格式：把報表拆成文字檔資料夾，能進 Git、能被程式讀。'],['語意模型','報表背後的「規則」：資料表、關聯和度量值。'],['事實表','記錄「發生了什麼」的表，例如每筆資金進出。'],['維度表','記錄「用什麼角度看」的表，例如公司、幣種、日期。'],['星狀模型','事實表在中間、維度表圍在四周的結構。'],['關聯','兩張表之間的連線，讓篩選器能傳遞。'],['度量值','一條可重用的公式，隨篩選器重算，例如預算執行率。'],['DAX','Power BI 寫度量值用的公式語言。'],['篩選器／篩選上下文','你選了公司或日期，度量值就只算那一部分。'],['KPI','關鍵指標，例如可用資金、逾期率。'],['TMDL','把語意模型存成文字的格式。'],['MCP','讓 AI 呼叫外部工具的標準介面。'],['Publish to web','Power BI 的公開連結，任何人可看。'],['無頭瀏覽器','沒有視窗、由程式操作的 Chrome。'],['Canvas','網頁上的「畫布」，用程式一筆筆畫圖。'],['純函式','同樣輸入永遠同樣輸出、不偷看時鐘；本專案用來保證畫面可重現。'],['幀／fps','一張畫面叫一幀；30 fps＝每秒 30 張。'],['場景 scene','影片的一段，這裡每個場景是一個畫圖函式。'],['時間軸 timeline','每個場景從第幾秒、長多久的清單，由旁白長度推導。'],['鎖定（--lock）','用真實音檔量過長度後固定時間軸，之後不手改。'],['cue','旁白中某個片段被念出的時間點，用來對齊音效。'],['TTS','文字轉語音。'],['取樣率／重新取樣','每秒取多少聲音樣本；24 kHz 要轉成 44.1 kHz 才不會被加快。'],['響度 LUFS','人耳感受到的整體音量；本專案導覽 −16、動畫約 −15.6。'],['峰值 dBFS','最大瞬間音量，不可超過 0 以免失真。'],['閃避 ducking','旁白一出現，配樂自動變小聲。'],['H.264／AAC','常見的影片／聲音編碼，幾乎所有裝置都能播。'],['faststart','把影片索引（moov）放到檔頭，網頁能邊載邊播。'],['Range 請求（206）','伺服器只回傳檔案的某一段，拖進度條才不用整支重載。'],['base64','把圖片變成文字塞進 HTML，讓單檔就包含所有圖。'],['單檔 HTML','一個 .html 檔包含網頁、圖與互動，雙擊可開。'],['CDN','把檔案放到各地節點，讓人載得更快。'],['commit／branch','Git 的一次存檔／一條獨立的存檔線。'],['gh-pages','GitHub Pages 讀取來發佈網站的分支。'],['wipe 轉場','一個形狀掃過畫面切到下一場景。'],['動態圖形 MG','用圖形、文字與運動表達資訊的動畫風格。'],['熱點 hotspot','圖上可點的小圓點，點了顯示說明。'],['示範（模擬）資料','不代表任何真實公司，只用來示範。']];
+function gl(q){q=(q||'').trim().toLowerCase();$('#gl').innerHTML=G.filter(g=>!q||(g[0]+g[1]).toLowerCase().includes(q)).map(g=>`<div class="card"><b>${esc(g[0])}</b><span>${esc(g[1])}</span></div>`).join('')||'<p class="hint">找不到，換個關鍵字試試。</p>'}
+$('#gs').oninput=e=>gl(e.target.value);gl('');
+})();
+</script>
+</body>
+</html>

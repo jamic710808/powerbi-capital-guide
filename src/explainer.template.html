@@ -95,6 +95,15 @@ pre{background:#08202c;color:#cdeee9;padding:16px 18px;border-radius:12px;font-s
 pre .k{color:#ffd27a}pre .c{color:#7fe0c6}pre .s{color:#ff9d6b}
 .btn{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:12px;font-weight:700;text-decoration:none}
 .btn.pri{background:var(--teal);color:#fff;border-color:var(--teal)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+nav a.navtech{background:var(--orange);color:#fff;font-weight:700;margin-left:6px}
+nav a.navtech:hover{filter:brightness(1.08)}
+.techbar{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:14px 18px;margin-top:16px;text-decoration:none;color:inherit;border:2px solid var(--orange)}
+.techbar:hover{transform:translateY(-2px)}
+.techbar .e{font-size:34px}
+.techbar .sub{color:var(--mut);font-size:14px}
+.techbar .go{background:var(--orange);color:#fff;border-radius:20px;padding:6px 16px;font-weight:800;white-space:nowrap}
+@media(max-width:900px){.techbar{grid-template-columns:auto 1fr}.techbar .go{grid-column:1/-1;text-align:center}}
 .btn:disabled{opacity:.45;cursor:default}
 /* star schema */
 .star{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
@@ -174,7 +183,7 @@ footer{padding:50px 0 70px;color:var(--mut);font-size:14px}
 </head>
 <body>
 <nav><div class="wrap"><b>資金 · Power BI</b>
-<a href="#top">全貌</a><a href="#film">影片</a><a href="#layers">三層樓</a><a href="#qs">六個問題</a><a href="#journey">資料旅程</a><a href="#star">星狀模型</a><a href="#pages">七個頁面</a><a href="#defs">口徑</a><a href="#charts">選圖</a><a href="#measures">度量值</a><a href="#notes">注意事項</a><a href="#run">自己打開</a>
+<a href="#top">全貌</a><a href="#film">影片</a><a href="#layers">三層樓</a><a href="#qs">六個問題</a><a href="#journey">資料旅程</a><a href="#star">星狀模型</a><a href="#pages">七個頁面</a><a href="#defs">口徑</a><a href="#charts">選圖</a><a href="#measures">度量值</a><a href="#notes">注意事項</a><a href="#run">自己打開</a><a class="navtech" href="tech.html">🛠 技術圖解</a>
 <button id="theme" aria-label="切換深淺色">🌓 深／淺</button></div></nav>
 
 <main class="wrap" id="top">
@@ -213,6 +222,7 @@ footer{padding:50px 0 70px;color:var(--mut);font-size:14px}
   </div>
  </div>
  <p class="hint">旁白皆為 Gemini TTS（Kore）；配樂為程式合成。旁白發音若有誤讀，以畫面字幕為準。動畫為示意畫面，不是報告截圖；候選安排（如資金池匹配）需經審批，不代表已執行。</p>
+ <a class="techbar card" href="tech.html"><span class="e">🛠</span><span><b>想知道這些網頁和影片是怎麼做出來的？</b><br><span class="sub">技術圖解：用了哪些工具、程式碼怎麼被呼叫、何時用、產出什麼（零基礎也能看）</span></span><span class="go">看技術圖解 →</span></a>
 </section>
 
 <!-- LAYERS -->
@@ -334,7 +344,7 @@ footer{padding:50px 0 70px;color:var(--mut);font-size:14px}
 <section id="run">
  <h2><small>11</small>自己動手：先線上看，再 3 步打開它</h2>
  <p style="font-size:18px;margin-bottom:10px">🌐 <b>線上路徑</b>（不用安裝任何東西）：Power BI 公開發佈版，直接在瀏覽器操作篩選器、切頁。</p>
- <p style="margin-bottom:18px"><a class="btn pri" href="https://app.powerbi.com/view?r=eyJrIjoiMjQwMzA4YjItOTMyNi00NmY0LWEzOTctMmI1MDBiYTgzODgzIiwidCI6IjE2ZGVlZGU4LTc5ZTktNGUzMy05OWU2LTlkOGQzOTQyZDc5NiIsImMiOjEwfQ%3D%3D" target="_blank" rel="noopener">開啟線上報告 ↗</a></p>
+ <p class="actions"><a class="btn pri" href="https://app.powerbi.com/view?r=eyJrIjoiMjQwMzA4YjItOTMyNi00NmY0LWEzOTctMmI1MDBiYTgzODgzIiwidCI6IjE2ZGVlZGU4LTc5ZTktNGUzMy05OWU2LTlkOGQzOTQyZDc5NiIsImMiOjEwfQ%3D%3D" target="_blank" rel="noopener">開啟線上報告 ↗</a><a class="btn pri" href="tech.html">開啟技術圖解 →</a></p>
  <p style="font-size:18px;margin-bottom:6px">想拆開研究，再用下面 3 步開本機檔：</p>
  <ol style="margin:0 0 14px 22px;font-size:18px;line-height:2">
   <li>用 Power BI Desktop 開啟 <code>.pbip</code> 檔（需開啟「Power BI 專案」預覽功能）。</li>
